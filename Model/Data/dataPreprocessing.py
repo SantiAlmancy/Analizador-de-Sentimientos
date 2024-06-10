@@ -1,14 +1,11 @@
 import os
 import pandas as pd
 import ast
-from langdetect import detect
-from langdetect.lang_detect_exception import LangDetectException
+import py3langid as langid
 
 def detectLanguage(text):
-    try:
-        return detect(text)
-    except LangDetectException:
-        return 'unknown'
+    lang, _ = langid.classify(text)
+    return lang
     
 def extractOverall(ratingsText):
     ratingsDictionary = ast.literal_eval(ratingsText)
