@@ -33,3 +33,8 @@ if __name__ == "__main__":
     data = data[data['language'] == 'en']
 
     print(data)
+
+    pathFilteredData = os.getenv('FILTERED_DATA_PATH')
+
+    # Generating a csv file without index numbers
+    data.to_csv(pathFilteredData, index=False)
