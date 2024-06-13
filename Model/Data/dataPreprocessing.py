@@ -30,8 +30,26 @@ def showDataDistribution(datafrane,columnName,title):
     plt.suptitle(title, fontsize=17)
     plt.show()
 
+def distributeData(dataframe):
+    # Filter out records where 'overall' is 0
+    filteredData = dataframe[dataframe['overall'] != 0]
+
+    # Count the number of reviews for each unique 'overall' value
+    counts = filteredData['overall'].value_counts()
+
+    # Calculate the minimum count across all 'overall' values
+    minCount = counts.min()
+
+    # Sort by 'num_helpful_votes' (descending) within each 'overall' group (ascending)
+    sortedData = filteredData.sort_values(by=['overall', 'num_helpful_votes'], ascending=[True, False])
+
+    # Group by 'overall' and take the first min_count rows from each group
+    newData = sortedData.groupby('overall').head(minCount).reset_index(drop=True)
+
+    return newData
+
+
 if __name__ == "__main__":
-    '''
     pathOriginalData = os.getenv('ORIGINAL_DATA_PATH')
 
     # Importing the data
@@ -49,20 +67,19 @@ if __name__ == "__main__":
     # Adding a column 'overall' with the extracted value from the column 'ratings'.
     data['overall'] = data['ratings'].apply(extractOverall)
 
-  
-    
-    data = data[['title', 'text', 'offering_id', 'num_helpful_votes', 'overall']]
-
-    #pathFilteredData = os.getenv('FILTERED_DATA_PATH')
-
-    # Generating a csv file without index numbers
-    #data.to_csv(pathFilteredData, index=False)
-    '''
-
-    data = pd.read_csv("filteredData.csv")
-
     # Filtering important columns
     data = data[['title', 'text', 'offering_id', 'num_helpful_votes', 'overall']]
+    print(data)
 
     # Showing the initial data distribution after the language filtering
     showDataDistribution(data,'overall','Initial data distribution')
+
+    data = distributeData(data)
+    print(data)
+
+    # Showing the new data distribution after the distribution of data
+    showDataDistribution(data,'overall','New data distribution') 
+
+    # Generating a csv file of new data without index numbers
+    pathFilteredData = os.getenv('FILTERED_DATA_PATH')
+    data.to_csv(pathFilteredData, index=False)   
