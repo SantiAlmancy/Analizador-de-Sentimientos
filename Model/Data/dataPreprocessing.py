@@ -46,6 +46,9 @@ def distributeData(dataframe):
     # Group by 'overall' and take the first min_count rows from each group
     newData = sortedData.groupby('overall').head(minCount).reset_index(drop=True)
 
+    # Shuffle the data to remove grouping by 'overall'
+    newData = newData.sample(frac=1).reset_index(drop=True)
+
     return newData
 
 
