@@ -6,12 +6,18 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm 
 
 def detectLanguage(text):
+    # Using langid to classify the text and detect the language
     lang, _ = langid.classify(text)
     return lang
     
 def extractOverall(ratingsText):
+    # Returns the value associated with the 'overall'
     ratingsDictionary = ast.literal_eval(ratingsText)
     return ratingsDictionary.get('overall', None)
+
+def trimTitle(title):
+    # Returning the title without the first 3 and the last 3 characters
+    return title[3:-3] if len(title) > 6 else ""
 
 def showDataDistribution(datafrane,columnName,title):
     # Counting the quantity of data according the values from the column overall
@@ -78,6 +84,10 @@ if __name__ == "__main__":
     showDataDistribution(data,'overall','Initial data distribution')
 
     data = distributeData(data)
+
+    # Removing special leading and trailing characters from the 'title' column
+    data['title'] = data['title'].apply(trimTitle)
+
     print(data)
 
     # Showing the new data distribution after the distribution of data
