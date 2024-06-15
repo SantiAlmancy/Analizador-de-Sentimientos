@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # Adding a column 'overall' with the extracted value from the column 'ratings'.
     data['overall'] = data['ratings'].apply(extractOverall)
 
-    # Filtering important columns
+    # Selecting important columns
     data = data[['title', 'text', 'offering_id', 'num_helpful_votes', 'overall']]
     print(data)
 
@@ -83,8 +83,23 @@ if __name__ == "__main__":
     print(data)
 
     # Showing the new data distribution after the distribution of data
-    showDataDistribution(data,'overall','New data distribution') 
+    showDataDistribution(data,'overall','New data distribution')  
+
+    # Importing hotels data
+    pathHotelData = os.getenv('HOTEL_DATA_PATH')
+    hotelData = pd.read_csv(pathHotelData)
+    hotelData = hotelData[['id', 'hotel_class', 'name']]
+
+    # Merging filterdData and hotelData
+    data = data.merge(hotelData, left_on='offering_id', right_on='id')
+
+    # Replacing None values in the column 'hotel_class' with 0
+    data['hotel_class'] = data['hotel_class'].fillna(0)
+
+    # Selecting important columns
+    data = data[['title', 'text', 'overall', 'num_helpful_votes', 'name','hotel_class']]
+    print(data)
 
     # Generating a csv file of new data without index numbers
     pathFilteredData = os.getenv('FILTERED_DATA_PATH')
-    data.to_csv(pathFilteredData, index=False)   
+    data.to_csv(pathFilteredData, index=False)  
