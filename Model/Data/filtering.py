@@ -22,3 +22,9 @@ def convert_number_words(text):
     for word, digit in num_words.items():
         text = re.sub(r'\b' + word + r'\b', digit, text)
     return text
+
+
+def clean_dataset(df, text_column):
+    #processing the dataset filtering based on previous methods
+    df['cleaned_text'] = df[text_column].apply(convert_number_words).apply(remove_punctuation)
+    return df
