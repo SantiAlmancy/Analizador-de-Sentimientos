@@ -11,8 +11,8 @@ def clean_text(text):
     return cleaned_text
 
 # Path to your CSV file
-input_csv_path = 'path/to/your/input.csv'
-output_csv_path = 'path/to/your/output.csv'
+input_csv_path = '/Users/mateo/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Trabajos/Trabajos Mateo/Universidad/Universidad Privada Boliviana/Semestre VIII/5. Inteligencia Artificial/PF/CSV/filteredData.csv'
+output_csv_path = 'filteredData.csv'
 
 # Read CSV, clean data, and write to a new CSV
 with open(input_csv_path, mode='r', encoding='utf-8') as infile, \
