@@ -1,8 +1,16 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Load the CSV file
-df = pd.read_csv('/Users/mateo/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Trabajos/Trabajos Mateo/Universidad/Universidad Privada Boliviana/Semestre VIII/5. Inteligencia Artificial/PF/CSV/filteredData.csv')
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the CSV file path from environment variables
+CSV_FILE_PATH = os.getenv('CSV_FILE_PATH')
+
+# Use the path to read the CSV file
+df = pd.read_csv(CSV_FILE_PATH, encoding='utf-8')
 
 # Extract the 'text' column as the documents
 documents = df['text'].tolist()
