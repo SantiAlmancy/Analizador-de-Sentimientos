@@ -1,4 +1,4 @@
-import csv
+import pandas as pd
 import re
 from nltk.tokenize import word_tokenize
 
@@ -12,17 +12,15 @@ def clean_text(text):
 
 # Path to your CSV file
 input_csv_path = '/Users/mateo/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Trabajos/Trabajos Mateo/Universidad/Universidad Privada Boliviana/Semestre VIII/5. Inteligencia Artificial/PF/CSV/filteredData.csv'
-output_csv_path = 'filteredData.csv'
+output_csv_path = 'filteredData_cleaned.csv'
 
-# Read CSV, clean data, and write to a new CSV
-with open(input_csv_path, mode='r', encoding='utf-8') as infile, \
-     open(output_csv_path, mode='w', encoding='utf-8', newline='') as outfile:
-    reader = csv.reader(infile)
-    writer = csv.writer(outfile)
-    
-    for row in reader:
-        # Apply cleaning to each cell in the row
-        cleaned_row = [clean_text(cell) for cell in row]
-        writer.writerow(cleaned_row)
+# Read CSV into a DataFrame
+df = pd.read_csv(input_csv_path, encoding='utf-8')
+
+# Apply cleaning to each cell in the DataFrame
+cleaned_df = df.applymap(clean_text)
+
+# Write the cleaned DataFrame back to a new CSV
+cleaned_df.to_csv(output_csv_path, index=False, encoding='utf-8')
 
 print("CSV cleaning completed.")
