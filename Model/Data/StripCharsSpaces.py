@@ -21,3 +21,27 @@ def specialCharacterRemoval(sentence, charsList):
 def removeMultipleSpaces(sentence):
   sentence = re.sub(r'\s+', ' ', sentence)
   return sentence
+
+if __name__ == "__main__":
+    # Importing the data
+    load_dotenv() 
+    filePath = os.getenv("FILTERED_DATA_PATH")
+    df = pd.read_csv(filePath)
+    print(df)
+
+    # Apply functions:
+    df['title'] = df['title'].apply(singleCharacterRemoval)
+    df['text'] = df['text'].apply(singleCharacterRemoval)
+    
+    special_characters_to_remove = [
+    '~', '`', '@', '#', '$', '%', '^', '&', '*', '(', ')',
+    '_', '+', '=', '{', '}', '[', ']', '|', ':', ';', '"',
+    "'", '<', '>', ',', '.', '?', '/', '-', '\n', '\t', '\r', '\x0b', '\x0c']
+    df['title'] = df['title'].apply(lambda x: specialCharacterRemoval(x, special_characters_to_remove))
+    df['text'] = df['text'].apply(lambda x: specialCharacterRemoval(x, special_characters_to_remove))
+
+    df['title'] = df['title'].apply(removeMultipleSpaces)
+    df['text'] = df['text'].apply(removeMultipleSpaces)
+
+    # Print result
+    print(df)
