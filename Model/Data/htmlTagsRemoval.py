@@ -1,5 +1,10 @@
 import csv
 from bs4 import BeautifulSoup
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 def remove_html_tags(input_string):
     # Check if input_string is indeed a string and looks like it might contain HTML
@@ -22,7 +27,7 @@ def clean_csv_column(input_csv_path, output_csv_path, column_index):
             writer.writerow(row)
 
 # Example usage:
-input_csv_path = '/Users/mateo/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Trabajos/Trabajos Mateo/Universidad/Universidad Privada Boliviana/Semestre VIII/5. Inteligencia Artificial/PF/CSV/filteredData.csv'  # Path to your input CSV file
+input_csv_path = os.getenv('CSV_FILE_PATH')  # Get the path from .env file
 output_csv_path = 'cleaned_output.csv'  # Path to your output CSV file
 column_index = 1  # Index of the column containing HTML content (0-based index)
 
