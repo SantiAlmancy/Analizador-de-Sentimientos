@@ -1,6 +1,11 @@
 import pandas as pd
 import re
 from nltk.tokenize import word_tokenize
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Function to clean text
 def clean_text(text):
@@ -10,8 +15,8 @@ def clean_text(text):
     cleaned_text = cleaned_text.replace('\u0020', '')  # Unicode for [U+32] is space
     return cleaned_text
 
-# Path to your CSV file
-input_csv_path = '/Users/mateo/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Trabajos/Trabajos Mateo/Universidad/Universidad Privada Boliviana/Semestre VIII/5. Inteligencia Artificial/PF/CSV/filteredData.csv'
+# Path to your CSV file from .env
+input_csv_path = os.getenv('CSV_FILE_PATH')
 output_csv_path = 'filteredData_cleaned.csv'
 
 # Read CSV into a DataFrame
