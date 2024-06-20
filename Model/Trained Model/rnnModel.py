@@ -1,9 +1,37 @@
 import os
 import pandas as pd
 import keras
+from numpy import asarray
+from numpy import zeros
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+
+# Creating embeddings dictionary with pretrained data
+def createEmbeddingsDictionary():
+    embeddingsDictionary = dict()
+    path = os.getenv("EMBEDDING_FILE_PATH")
+    gloveFile = open(path, encoding="utf8")
+
+    for line in gloveFile:
+        records = line.split()
+        word = records[0]
+        vector_dimensions = asarray(records[1:], dtype='float32')
+        embeddingsDictionary [word] = vector_dimensions
+    gloveFile.close()
+
+    return embeddingsDictionary
+
+# Creating embedding matrix with our vocabulary and the embeddings dictionary
+def createEmbeddingMatrix(vocabLength, wordTokenizer):
+    embeddingsDictionary = createEmbeddingsDictionary()
+    embeddingMatrix = zeros((vocabLength, 100))
+    for word, index in wordTokenizer.word_index.items():
+        embeddingVector = embeddingsDictionary.get(word)
+        if embeddingVector is not None:
+            embeddingMatrix[index] = embeddingVector
+
+    return embeddingMatrix
 
 if __name__ == "__main__":
     # Importing the data
@@ -46,4 +74,9 @@ if __name__ == "__main__":
     maxlen = 100
     xTrain = pad_sequences(xTrain, padding='post', maxlen=maxlen)
     xTest = pad_sequences(xTest, padding='post', maxlen=maxlen)
+
+    # Creating embedding matrix
+    embeddingMatrix = createEmbeddingMatrix(vocabLength, wordTokenizer)
+
+    print(embeddingMatrix.shape)
 
