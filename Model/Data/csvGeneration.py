@@ -5,6 +5,10 @@ import py3langid as langid
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm 
 
+# Returns the number of words in the text
+def countWords(text):
+    return len(text.split())
+
 def detectLanguage(text):
     # Using langid to classify the text and detect the language
     lang, _ = langid.classify(text)
@@ -71,6 +75,12 @@ if __name__ == "__main__":
 
     # Adding a column 'overall' with the extracted value from the column 'ratings'.
     data['overall'] = data['ratings'].apply(extractOverall)
+
+    # Adding a column 'word_count' with the word count of the text in the column 'text'
+    data['word_count'] = data['text'].apply(countWords)
+
+    # Filtering out rows with more than 250 words
+    data = data[data['word_count'] <= 250]
 
     # Selecting important columns
     data = data[['title', 'text', 'offering_id', 'num_helpful_votes', 'overall']]
