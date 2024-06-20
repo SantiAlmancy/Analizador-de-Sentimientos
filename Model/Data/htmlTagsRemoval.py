@@ -27,8 +27,8 @@ def clean_csv_column(input_csv_path, output_csv_path, column_index):
             writer.writerow(row)
 
 # Example usage:
-input_csv_path = os.getenv('CSV_FILE_PATH')  # Get the path from .env file
-output_csv_path = 'cleaned_output.csv'  # Path to your output CSV file
-column_index = 1  # Index of the column containing HTML content (0-based index)
+#input_csv_path = os.getenv('CSV_FILE_PATH')  # Get the path from .env file
+#output_csv_path = 'cleaned_output.csv'  # Path to your output CSV file
+#column_index = 1  # Index of the column containing HTML content (0-based index)
 
-clean_csv_column(input_csv_path, output_csv_path, column_index)
+#clean_csv_column(input_csv_path, output_csv_path, column_index)
