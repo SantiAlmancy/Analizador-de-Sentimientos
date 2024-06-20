@@ -6,6 +6,9 @@ from numpy import zeros
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+from keras.models import Sequential
+from keras.layers import Embedding, SimpleRNN, Dense
+from keras.regularizers import l2
 
 # Creating embeddings dictionary with pretrained data
 def createEmbeddingsDictionary():
@@ -33,13 +36,24 @@ def createEmbeddingMatrix(vocabLength, wordTokenizer):
 
     return embeddingMatrix
 
+# Creation of the model
+def createRNNModel(embeddingMatrix, vocabLength, maxLen):
+    model = Sequential()
+    model.add(Embedding(vocabLength, 100, weights=[embeddingMatrix], input_length=maxLen, trainable=True))
+    model.add(SimpleRNN(256, dropout=0.2, recurrent_dropout=0.2, activation='relu', return_sequences=True, kernel_regularizer=l2(0.01)))
+    model.add(SimpleRNN(128, dropout=0.2, recurrent_dropout=0.2, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Dense(5, activation='softmax'))  # 5 units due to we have 5 categories
+
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
 if __name__ == "__main__":
     # Importing the data
     dataPath = os.getenv("PREPROCESSED_DATA_PATH")
     df = pd.read_csv(dataPath)
 
     # Number of samples per group
-    nSamples = 1000
+    nSamples = 7500
     randomState = 42  # Set a seed for reproducibility
 
     # Select 1000 samples of 'text' for each unique value in 'overall'
@@ -71,12 +85,17 @@ if __name__ == "__main__":
     vocabLength = len(wordTokenizer.word_index) + 1
 
     # Padding all reviews to fixed length 100
-    maxlen = 100
-    xTrain = pad_sequences(xTrain, padding='post', maxlen=maxlen)
-    xTest = pad_sequences(xTest, padding='post', maxlen=maxlen)
+    maxLen = 100
+    xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
+    xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 
     # Creating embedding matrix
     embeddingMatrix = createEmbeddingMatrix(vocabLength, wordTokenizer)
 
     print(embeddingMatrix.shape)
 
+    # Creating the model
+    model = createRNNModel(embeddingMatrix, vocabLength, maxLen)
+
+    # Training the model
+    model.fit(xTrain, yTrain, epochs=30, batch_size=64, validation_data=(xTest, yTest))
