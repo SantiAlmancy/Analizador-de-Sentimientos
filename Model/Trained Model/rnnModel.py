@@ -1,6 +1,9 @@
 import os
 import pandas as pd
 import keras
+from sklearn.model_selection import train_test_split
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 
 if __name__ == "__main__":
     # Importing the data
@@ -25,3 +28,22 @@ if __name__ == "__main__":
     dataX = df['text']
     dataY = keras.utils.to_categorical(df['overall'] - 1, 5) # Converting to one-hot vector to classify the data
     #print(dataY)
+
+    # Splitting the data
+    xTrain, xTest, yTrain, yTest = train_test_split(dataX, dataY, test_size=0.30, random_state=randomState)
+
+    # Tokenizing and converting text to numerical sequences
+    wordTokenizer = Tokenizer()
+    wordTokenizer.fit_on_texts(xTrain)
+
+    xTrain = wordTokenizer.texts_to_sequences(xTrain)
+    xTest = wordTokenizer.texts_to_sequences(xTest)
+
+    # Adding 1 to store dimensions for words for which no pretrained word embeddings exist
+    vocabLength = len(wordTokenizer.word_index) + 1
+
+    # Padding all reviews to fixed length 100
+    maxlen = 100
+    xTrain = pad_sequences(xTrain, padding='post', maxlen=maxlen)
+    xTest = pad_sequences(xTest, padding='post', maxlen=maxlen)
+
