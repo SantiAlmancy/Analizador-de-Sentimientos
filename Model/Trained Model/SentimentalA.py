@@ -40,13 +40,14 @@ def createEmbeddingMatrix(vocabLength, wordTokenizer):
 def createRNNModel(embeddingMatrix, vocabLength, maxLen):
     model = Sequential()
     model.add(Embedding(vocabLength, 100, weights=[embeddingMatrix], input_length=maxLen, trainable=True))
-    model.add(Bidirectional(LSTM(256, return_sequences=True, kernel_regularizer=l2(0.02))))
-    model.add(Dropout(0.1))  # Adding Dropout for regularization
-    model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.02))))
-    model.add(Dense(3, activation='softmax'))  # 5 units due to we have 5 categories
+    model.add(Bidirectional(LSTM(256, return_sequences=True, kernel_regularizer=l2(0.03))))
+    model.add(Dropout(0.2))  # Adding Dropout for regularization
+    model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.03))))
+    model.add(Dense(2, activation='sigmoid'))  # 5 units due to we have 5 categories
 
     model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
+
 
 dataPath = r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData.csv'
 df = pd.read_csv(dataPath)
@@ -67,22 +68,22 @@ df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
 
 # Creating data and its labels to training
 
-# Apply the label adjustment function to create adjusted labels
-dataX = df['text']
 def adjust_labels(label):
     if label in [1.0, 2.0]:
         return 0  # Combine 1.0 and 2.0 into category 0
-    elif label == 3.0:
-        return 1  # Leave 3.0 unchanged as category 1
     elif label in [4.0, 5.0]:
-        return 2  # Combine 4.0 and 5.0 into category 2
+        return 1  # Combine 4.0 and 5.0 into category 2
+    elif label in [3.0]:
+        return 2 
     else:
         return label  # Handle any other labels (optional)
 
 # Apply the label adjustment function to create adjusted labels
 df['adjusted_label'] = df['overall'].apply(adjust_labels)
-dataY = keras.utils.to_categorical(df['adjusted_label'] , 3) # Converting to one-hot vector to classify the data
+df = df[df['adjusted_label'] <= 1]
+
 dataX = df['text']
+dataY = keras.utils.to_categorical(df['adjusted_label'] , 2) # Converting to one-hot vector to classify the data
 #print(dataY)
 
 # Splitting the data
@@ -118,3 +119,30 @@ model.fit(xTrain, yTrain, epochs=30, validation_split=0.2)
 loss, accuracy = model.evaluate(xTest, yTest)
 print('Test Loss:', loss)
 print('Test Accuracy:',  accuracy)
+
+string = "place was really bad"
+string2 = "wonderful service nice location"
+
+def predict_text(text, model, wordTokenizer, maxLen):
+    # Convertir el texto en una secuencia numérica
+    sequence = wordTokenizer.texts_to_sequences([text])
+    
+    # Rellenar la secuencia para que tenga la misma longitud que los datos de entrenamiento
+    padded_sequence = pad_sequences(sequence, padding='post', maxlen=maxLen)
+    
+    # Hacer la predicción
+    prediction = model.predict(padded_sequence)
+    
+    # Convertir la predicción a una categoría
+    predicted_category = prediction.argmax(axis=-1)
+    
+    # Mapeo de la categoría predicha a las etiquetas originales
+    category_map = {0: 'Negativo', 1: 'Positivo'}
+    predicted_label = category_map[predicted_category[0]]
+    
+    return predicted_label
+
+# Ejemplo de uso
+#text = "El producto es excelente y cumple con todas mis expectativas."
+predicted_label = predict_text(string2, model, wordTokenizer, maxLen)
+print(f'Predicted label: {predicted_label}')
