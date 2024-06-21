@@ -32,7 +32,17 @@ class ModelTrainer:
                 report_to="none"
             )
 
-            
+            trainer = Trainer(
+                model=model,
+                args=training_args,
+                train_dataset=self.train_dataset,
+                eval_dataset=self.test_dataset,
+                compute_metrics=self.compute_metrics,
+                tokenizer=self.tokenizer
+            )
+
+            trainer.train()
+            return trainer
         except Exception as e:
             print(f"Error training model: {e}")
             return None
