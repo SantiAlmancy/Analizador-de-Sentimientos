@@ -13,4 +13,14 @@ class DatasetHandler:
             print(f"Error creating dataset: {e}")
             return None
 
-    
+    def split_dataset(self, test_size=0.2):
+        try:
+            dataset = self.create_dataset()
+            train_test_split = dataset.train_test_split(test_size=test_size)
+            return DatasetDict({
+                'train': train_test_split['train'],
+                'test': train_test_split['test']
+            })
+        except Exception as e:
+            print(f"Error splitting dataset: {e}")
+            return None
