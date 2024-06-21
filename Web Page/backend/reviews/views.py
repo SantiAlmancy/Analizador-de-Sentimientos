@@ -33,6 +33,12 @@ class CreateReviewView(APIView):
                 review['id'] = len(reviews) + 1  # Auto-generate id
                 reviews.append(review)
                 return Response(review, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "message": "Unable to create review",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
         except json.JSONDecodeError:
-            return Response({"error": "Invalid JSON"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "message": "Unable to create review",
+                "detail": "Invalid JSON"
+            }, status=status.HTTP_400_BAD_REQUEST)
