@@ -37,7 +37,21 @@ def main():
 
     print(tokenized_datasets['train'].column_names)
 
-    
+    model_trainer = ModelTrainer(checkpoint, tokenized_datasets['train'], tokenized_datasets['test'], tokenizer)
+    trainer = model_trainer.train_model(output_dir=output_dir)
+
+    if trainer is None:
+        return
+
+    trainer.push_to_hub(commit_message="Training completed")
+
+    classifier = pipeline("text-classification", model=output_dir)
+    pred = classifier("I don't know how to feel, the hotel was regular, not many rooms but they were clean",
+                      return_all_scores=True)
+    labels = ["Enojado", "Triste", "Indiferente", "Sorprendido", "Feliz"]
+    df = pd.DataFrame(pred[0])
+    plt.bar(labels, 100 * df["score"])
+    plt.show()
 
 if __name__ == "__main__":
     main()
