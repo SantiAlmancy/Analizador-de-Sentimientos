@@ -40,14 +40,13 @@ def createEmbeddingMatrix(vocabLength, wordTokenizer):
 def createRNNModel(embeddingMatrix, vocabLength, maxLen):
     model = Sequential()
     model.add(Embedding(vocabLength, 100, weights=[embeddingMatrix], input_length=maxLen, trainable=True))
-    model.add(Bidirectional(LSTM(256, return_sequences=True, kernel_regularizer=l2(0.03))))
-    model.add(Dropout(0.2))  # Adding Dropout for regularization
-    model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.03))))
-    model.add(Dense(5, activation='softmax'))  # 5 units due to we have 5 categories
+    model.add(Bidirectional(LSTM(256, return_sequences=True, kernel_regularizer=l2(0.02))))
+    model.add(Dropout(0.1))  # Adding Dropout for regularization
+    model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.02))))
+    model.add(Dense(3, activation='softmax'))  # 5 units due to we have 5 categories
 
     model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
-
 
 dataPath = r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData.csv'
 df = pd.read_csv(dataPath)
@@ -69,9 +68,21 @@ df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
 # Creating data and its labels to training
 
 # Apply the label adjustment function to create adjusted labels
-
 dataX = df['text']
-dataY = keras.utils.to_categorical(df['overall'] - 1, 5) # Converting to one-hot vector to classify the data
+def adjust_labels(label):
+    if label in [1.0, 2.0]:
+        return 0  # Combine 1.0 and 2.0 into category 0
+    elif label == 3.0:
+        return 1  # Leave 3.0 unchanged as category 1
+    elif label in [4.0, 5.0]:
+        return 2  # Combine 4.0 and 5.0 into category 2
+    else:
+        return label  # Handle any other labels (optional)
+
+# Apply the label adjustment function to create adjusted labels
+df['adjusted_label'] = df['overall'].apply(adjust_labels)
+dataY = keras.utils.to_categorical(df['adjusted_label'] , 3) # Converting to one-hot vector to classify the data
+dataX = df['text']
 #print(dataY)
 
 # Splitting the data
