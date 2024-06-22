@@ -1,20 +1,17 @@
 from rest_framework import serializers
+from .models import Hotel, Review
 
-# Sample data (would be in your database in a real application)
-hotels = [
-    {"id": 1, "name": "Hotel California"},
-    {"id": 2, "name": "Grand Budapest Hotel"}
-]
+# Define HotelSerializer
+class HotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hotel
+        fields = '__all__'
 
-class HotelSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=255)
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
 
-class ReviewSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)  # Make id read-only
-    hotel_id = serializers.IntegerField()
-    comment = serializers.CharField(max_length=1024)
-    
     def validate_comment(self, value):
         if not value.strip():
             raise serializers.ValidationError("Comment cannot be empty.")
@@ -23,6 +20,6 @@ class ReviewSerializer(serializers.Serializer):
         return value
     
     def validate_hotel_id(self, value):
-        if not any(hotel['id'] == value for hotel in hotels):
+        if not Hotel.objects.filter(id=value).exists():
             raise serializers.ValidationError(f"Hotel with id {value} does not exist.")
         return value
