@@ -1,0 +1,8 @@
+.review-text {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    text-align: left;
+    padding-top: 13px;
+    padding-bottom: 13px;
+}

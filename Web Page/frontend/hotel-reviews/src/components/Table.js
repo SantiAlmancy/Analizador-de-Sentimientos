@@ -9,7 +9,7 @@ const Table = (props) => {
                 data={props.data} 
                 pagination
                 fixedHeader
-                fixedHeaderScrollHeight='475px'
+                fixedHeaderScrollHeight={props.height}
                 highlightOnHover
             />
         </div>

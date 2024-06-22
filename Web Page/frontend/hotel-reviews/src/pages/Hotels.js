@@ -30,17 +30,20 @@ const Hotels = () => {
         {
             name: "Id",
             selector: (row) => row.id,
-            sortable: true
-        },
-        {
-            name: "Name",
-            selector: (row) => row.name,
-            sortable: true
+            sortable: true,
+            width: "13%"
         },
         {
             name: "Class",
             selector: (row) => row.hotel_class,
-            sortable: true
+            sortable: true,
+            width: "13%"
+        },
+        {
+            name: "Name",
+            selector: (row) => row.name,
+            sortable: true,
+            width: "57%"
         },
         {
             name: "Action",
@@ -61,7 +64,7 @@ const Hotels = () => {
             <Banner />
             <div className='hotelList'>
                 <h1>Hotel list</h1>
-                <Table columns={columns} data={data} />
+                <Table columns={columns} data={data} height={'475px'} />
             </div>
         </div>
     );

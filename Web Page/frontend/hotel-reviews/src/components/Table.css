@@ -1,18 +1,18 @@
 .dataTable .rdt_TableHead {
     color: #000000;
-    font-size: 19px;
+    font-size: 21px;
 }
 
 .dataTable .rdt_TableRow {
     min-height: 56px;
     background-color: #0e182a00;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .dataTable {
     margin-top: 0%;
-    margin-right: 7%;
+    margin-right: 5%;
     margin-bottom: 5%;
-    margin-left: 7%;
+    margin-left: 5%;
     max-width: 100%;
 }
