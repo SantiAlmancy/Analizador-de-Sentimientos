@@ -49,18 +49,18 @@ def createRNNModel(embeddingMatrix, vocabLength, maxLen):
     return model
 
 
-dataPath = r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData.csv'
+dataPath = r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData2.csv'
 df = pd.read_csv(dataPath)
 
 # Number of samples per group
-nSamples = 8000
+#nSamples = 8000
 randomState = 42  # Set a seed for reproducibility
 
 # Select 1000 samples of 'text' for each unique value in 'overall'
-df = df.groupby('overall', group_keys=False).apply(lambda x: x.sample(min(len(x), nSamples), random_state=randomState))
+#df = df.groupby('overall', group_keys=False).apply(lambda x: x.sample(min(len(x), nSamples), random_state=randomState))
 
 # Shuffle the data to remove grouping by 'overall'
-df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
+#df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
 
 #overall_counts = df['overall'].value_counts()
 #print(overall_counts)
@@ -68,22 +68,10 @@ df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
 
 # Creating data and its labels to training
 
-def adjust_labels(label):
-    if label in [1.0, 2.0]:
-        return 0  # Combine 1.0 and 2.0 into category 0
-    elif label in [4.0, 5.0]:
-        return 1  # Combine 4.0 and 5.0 into category 2
-    elif label in [3.0]:
-        return 2 
-    else:
-        return label  # Handle any other labels (optional)
-
 # Apply the label adjustment function to create adjusted labels
-df['adjusted_label'] = df['overall'].apply(adjust_labels)
-df = df[df['adjusted_label'] <= 1]
 
 dataX = df['text']
-dataY = keras.utils.to_categorical(df['adjusted_label'] , 2) # Converting to one-hot vector to classify the data
+dataY = keras.utils.to_categorical(df['overall'] -1, 2) # Converting to one-hot vector to classify the data
 #print(dataY)
 
 # Splitting the data
@@ -113,13 +101,13 @@ print(embeddingMatrix.shape)
 model = createRNNModel(embeddingMatrix, vocabLength, maxLen)
 
 # Training the model
-model.fit(xTrain, yTrain, epochs=30, validation_split=0.2)
+model.fit(xTrain, yTrain, epochs=14, validation_split=0.2)
 
 # Evaluating the model
 loss, accuracy = model.evaluate(xTest, yTest)
 print('Test Loss:', loss)
 print('Test Accuracy:',  accuracy)
-
+model.save(r'C:\Users\Ale\UPB\Inteligencia Artificial\Model2Categories')
 string = "place was really bad"
 string2 = "wonderful service nice location"
 
