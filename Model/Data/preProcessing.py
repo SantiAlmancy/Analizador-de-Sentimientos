@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from dotenv import load_dotenv 
-from csvGeneration import distributeData
 from htmlTagsRemoval import remove_html_tags
 #from maxChar import singleCharacterRemoval, removeMultipleSpaces
 
