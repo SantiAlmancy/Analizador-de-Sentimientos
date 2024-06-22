@@ -1,25 +1,32 @@
 from rest_framework import serializers
-from .models import Hotel, Review
 
-# Define HotelSerializer
-class HotelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hotel
-        fields = '__all__'
+class HotelSerializer(serializers.Serializer):
+    hotel_id = serializers.CharField(max_length=100)
+    hotel_name = serializers.CharField(max_length=255)
+    hotel_class = serializers.FloatField()
 
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = '__all__'
-
-    def validate_comment(self, value):
-        if not value.strip():
-            raise serializers.ValidationError("Comment cannot be empty.")
-        if len(value) < 10:
-            raise serializers.ValidationError("Comment must be at least 10 characters long.")
+    def validate_hotel_name(self, value):
+        if not value:
+            raise serializers.ValidationError("Hotel name cannot be empty.")
         return value
-    
-    def validate_hotel_id(self, value):
-        if not Hotel.objects.filter(id=value).exists():
-            raise serializers.ValidationError(f"Hotel with id {value} does not exist.")
+
+    def validate_hotel_class(self, value):
+        if not 1 <= value <= 5:
+            raise serializers.ValidationError("Hotel class must be between 1 and 5.")
+        return value
+
+class ReviewSerializer(serializers.Serializer):
+    hotel_id = serializers.CharField(max_length=100)
+    review_id = serializers.CharField(max_length=100)
+    title = serializers.CharField(max_length=255)
+    review = serializers.CharField()
+
+    def validate_title(self, value):
+        if not value:
+            raise serializers.ValidationError("Title cannot be empty.")
+        return value
+
+    def validate_review(self, value):
+        if len(value) < 10:
+            raise serializers.ValidationError("Review must be at least 10 characters long.")
         return value
