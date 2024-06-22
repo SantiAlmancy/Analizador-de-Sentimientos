@@ -21,11 +21,10 @@
     padding: 10px 20px;
     border-radius: 50px;
     font-family: "Josefin Sans", sans-serif;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.rowButton.clicked {
-    background-color: #fba20e;
+.rowButton:hover {
+    background-color: #f5b042;
 }

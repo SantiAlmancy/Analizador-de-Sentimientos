@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Banner from '../components/Banner';
-import './Hotels.css';
 import Table from '../components/Table';
+import './Hotels.css';
 
 const Hotels = () => {
-    const [clickedButtonId, setClickedButtonId] = useState(null);
+    const navigate = useNavigate();
 
     const data = [
         { "id": 1, "name": "Hotel California", "hotel_class": 3 },
@@ -22,8 +23,7 @@ const Hotels = () => {
     ];
 
     const handleButtonClick = (id) => {
-        console.log(`Clicked ID: ${id}`);
-        setClickedButtonId(id);
+        navigate(`/reviews/${id}`); 
     };
 
     const columns = [
@@ -46,7 +46,7 @@ const Hotels = () => {
             name: "Action",
             cell: row => (
                 <button 
-                    className={`rowButton ${clickedButtonId === row.id ? 'clicked' : ''}`}
+                    className="rowButton"
                     onClick={() => handleButtonClick(row.id)}
                 >
                     Reviews
