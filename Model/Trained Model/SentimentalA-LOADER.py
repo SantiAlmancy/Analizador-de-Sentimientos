@@ -6,44 +6,59 @@ from keras_preprocessing.sequence import pad_sequences
 from keras.models import load_model
 import argparse
 
-def main(csv_path, model_path):
-    # Load the data
-    df = pd.read_csv(csv_path)
-    randomState = 42
-    dataX = df['text']
-    dataY = keras.utils.to_categorical(df['overall'] - 1, 3)  # Converting to one-hot vector to classify the data
+string2 = "My stay at the Budget Inn was terrible. The room was dirty, and there were issues with the plumbing. The staff were unresponsive and unhelpful. The noise levels were high, making it hard to sleep. Overall, it was an unpleasant experience, and I regret staying there."
 
-    # Splitting the data
-    xTrain, xTest, yTrain, yTest = train_test_split(dataX, dataY, test_size=0.30, random_state=randomState)
 
-    # Tokenizing and converting text to numerical sequences
-    wordTokenizer = Tokenizer()
-    wordTokenizer.fit_on_texts(xTrain)
+def predict_text(text, model, wordTokenizer, maxLen):
+    # Convertir el texto en una secuencia numérica
+    sequence = wordTokenizer.texts_to_sequences([text])
+    
+    # Rellenar la secuencia para que tenga la misma longitud que los datos de entrenamiento
+    padded_sequence = pad_sequences(sequence, padding='post', maxlen=maxLen)
+    
+    # Hacer la predicción
+    prediction = model.predict(padded_sequence)
+    
+    # Convertir la predicción a una categoría
+    predicted_category = prediction.argmax(axis=-1)
+    
+    # Mapeo de la categoría predicha a las etiquetas originales
+    category_map = {0: 'Negativa', 1: 'Positiva'}
+    predicted_label = category_map[predicted_category[0]]
+    
+    return predicted_label
 
-    xTrain = wordTokenizer.texts_to_sequences(xTrain)
-    xTest = wordTokenizer.texts_to_sequences(xTest)
+# Load the data
+df = pd.read_csv(r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData2.csv')
+randomState = 42
+dataX = df['text']
+dataY = keras.utils.to_categorical(df['overall'] - 1, 2)  # Converting to one-hot vector to classify the data
 
-    # Adding 1 to store dimensions for words for which no pretrained word embeddings exist
-    vocabLength = len(wordTokenizer.word_index) + 1
+# Splitting the data
+xTrain, xTest, yTrain, yTest = train_test_split(dataX, dataY, test_size=0.30, random_state=randomState)
 
-    # Padding all reviews to fixed length 100
-    maxLen = 250
-    xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
-    xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
+# Tokenizing and converting text to numerical sequences
+wordTokenizer = Tokenizer()
+wordTokenizer.fit_on_texts(xTrain)
 
-    # Load the model
-    loaded_model = load_model(model_path)
+xTrain = wordTokenizer.texts_to_sequences(xTrain)
+xTest = wordTokenizer.texts_to_sequences(xTest)
 
-    # Use the loaded model for predictions or evaluation
-    loss, accuracy = loaded_model.evaluate(xTest, yTest)
-    print(f'Loaded model accuracy: {accuracy}')
+# Adding 1 to store dimensions for words for which no pretrained word embeddings exist
+vocabLength = len(wordTokenizer.word_index) + 1
 
-if __name__ == "__main__":
-    # Set up argument parser
-    parser = argparse.ArgumentParser(description='Process CSV and model paths.')
-    parser.add_argument('csv_path', type=str, help='Path to the CSV file')
-    parser.add_argument('model_path', type=str, help='Path to the trained model file')
+# Padding all reviews to fixed length 100
+maxLen = 250
+xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
+xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 
-    args = parser.parse_args()
+# Load the model
+loaded_model = load_model(r'C:\Users\Ale\UPB\Inteligencia Artificial\Model2Categories')
 
-    main(args.csv_path, args.model_path)
+loss, accuracy = loaded_model.evaluate(xTest, yTest)
+print('Test Loss:', loss)
+print('Test Accuracy:',  accuracy)
+# Ejemplo de uso
+#text = "El producto es excelente y cumple con todas mis expectativas."
+predicted_label = predict_text(string2, loaded_model, wordTokenizer, maxLen)
+print(f'Predicted label: {predicted_label}')
