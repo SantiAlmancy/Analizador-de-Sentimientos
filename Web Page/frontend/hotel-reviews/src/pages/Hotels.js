@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Banner from '../components/Banner';
 import Table from '../components/Table';
+import getHotels from '../services/HotelService';
 import './Hotels.css';
 
 const Hotels = () => {
     const navigate = useNavigate();
 
-    const data = [
-        { "id": 1, "name": "Hotel California", "hotel_class": 3 },
-        { "id": 2, "name": "Grand Budapest Hotel", "hotel_class": 5 },
-        { "id": 3, "name": "Hotel 3", "hotel_class": 4 },
-        { "id": 4, "name": "Hotel 4", "hotel_class": 1 },
-        { "id": 5, "name": "Hotel 5", "hotel_class": 4 },
-        { "id": 6, "name": "Hotel 6", "hotel_class": 4 },
-        { "id": 7, "name": "Hotel 7", "hotel_class": 4 },
-        { "id": 8, "name": "Hotel 8", "hotel_class": 4 },
-        { "id": 9, "name": "Hotel 9", "hotel_class": 4 },
-        { "id": 10, "name": "Hotel 10", "hotel_class": 4 },
-        { "id": 11, "name": "Hotel 11", "hotel_class": 4 }
-    ];
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const result = await getHotels('endpoint');
+            setData(result);
+          } catch (err) {
+            console.error(err);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     const handleButtonClick = (id) => {
         navigate(`/reviews/${id}`); 
@@ -29,7 +31,7 @@ const Hotels = () => {
     const columns = [
         {
             name: "Id",
-            selector: (row) => row.id,
+            selector: (row) => row.hotel_id,
             sortable: true,
             width: "13%"
         },
@@ -41,7 +43,7 @@ const Hotels = () => {
         },
         {
             name: "Name",
-            selector: (row) => row.name,
+            selector: (row) => row.hotel_name,
             sortable: true,
             width: "57%"
         },
@@ -50,7 +52,7 @@ const Hotels = () => {
             cell: row => (
                 <button 
                     className="rowButton"
-                    onClick={() => handleButtonClick(row.id)}
+                    onClick={() => handleButtonClick(row.hotel_id)}
                 >
                     Reviews
                 </button>
