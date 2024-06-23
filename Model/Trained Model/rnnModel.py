@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
-from keras.layers import Embedding, SimpleRNN, Dense
+from keras.layers import Embedding, SimpleRNN, Dense, Bidirectional, Dropout
 from keras.regularizers import l2
 
 # Creating embeddings dictionary with pretrained data
@@ -40,8 +40,10 @@ def createEmbeddingMatrix(vocabLength, wordTokenizer):
 def createRNNModel(embeddingMatrix, vocabLength, maxLen):
     model = Sequential()
     model.add(Embedding(vocabLength, 100, weights=[embeddingMatrix], input_length=maxLen, trainable=True))
-    model.add(SimpleRNN(256, dropout=0.2, recurrent_dropout=0.2, activation='relu', return_sequences=True, kernel_regularizer=l2(0.01)))
-    model.add(SimpleRNN(128, dropout=0.2, recurrent_dropout=0.2, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Bidirectional(SimpleRNN(256, activation='relu', return_sequences=True, kernel_regularizer=l2(0.01))))
+    model.add(Dropout(0.2))
+    model.add(Bidirectional(SimpleRNN(128, activation='relu', kernel_regularizer=l2(0.01))))
+    model.add(Dropout(0.2))
     model.add(Dense(5, activation='softmax'))  # 5 units due to we have 5 categories
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -61,10 +63,6 @@ if __name__ == "__main__":
     
     # Shuffle the data to remove grouping by 'overall'
     df = df.sample(frac=1, random_state=randomState).reset_index(drop=True)
-
-    #overall_counts = df['overall'].value_counts()
-    #print(overall_counts)
-    #print(df)
 
     # Creating data and its labels to training
     dataX = df['text']
