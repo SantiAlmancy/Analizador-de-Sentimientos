@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Hotel, Review
 from .serializers import HotelSerializer, ReviewSerializer
+from .predictionModels import Model
+
+# Create an instance of Model
+models = Model()
 
 class HotelListView(APIView):
     def get(self, request):
@@ -60,3 +64,35 @@ class CreateHotelView(APIView):
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message": "Hotels created successfully", "hotels": created_hotels}, status=status.HTTP_201_CREATED)
+
+class HuggingFacePredictionView(APIView):
+    def post(self, request):
+        text = request.data.get("text", "")
+        hotel_id = request.data.get("hotel_id", "")
+        title = request.data.get("title", "")
+
+        if not text or not hotel_id or not title:
+            return Response({"error": "Text, hotel_id, and title are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            hotel = Hotel.objects.get(hotel_id=hotel_id)
+        except Hotel.DoesNotExist:
+            return Response({"error": "Hotel does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Preprocess text and get prediction
+        processed_text = models.preprocess_text(text)
+        prediction = models.classifier(processed_text, return_all_scores=True)
+        
+        # Map predicted label
+        predicted_label = models.mapLabels(prediction).lower()
+
+        # Create Review object
+        review_data = {
+            "hotel": hotel,
+            "title": title,
+            "review": text,  # Save original text
+            "value": predicted_label
+        }
+        review_instance = Review.objects.create(**review_data)
+        serializer = ReviewSerializer(review_instance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
