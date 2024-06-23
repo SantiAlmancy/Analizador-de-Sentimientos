@@ -16,6 +16,7 @@ const Hotels = () => {
           try {
             const result = await getHotels();
             setData(result);
+            console.log(result);
           } catch (err) {
             console.error(err);
           }
