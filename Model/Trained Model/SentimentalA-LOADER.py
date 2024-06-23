@@ -6,9 +6,7 @@ from keras_preprocessing.sequence import pad_sequences
 from keras.models import load_model
 import argparse
 
-string2 = "My stay at the Budget Inn was terrible. The room was dirty, and there were issues with the plumbing. The staff were unresponsive and unhelpful. The noise levels were high, making it hard to sleep. Overall, it was an unpleasant experience, and I regret staying there."
-
-
+string2 = "My stay at the Grand Palace Hotel was extraordinary. The staff were exceptionally welcoming, the room was immaculate, and the views were stunning. The complimentary breakfast was delicious and varied. I felt pampered throughout my stay. Definitely coming back!"
 def predict_text(text, model, wordTokenizer, maxLen):
     # Convertir el texto en una secuencia numérica
     sequence = wordTokenizer.texts_to_sequences([text])
@@ -32,7 +30,7 @@ def predict_text(text, model, wordTokenizer, maxLen):
 df = pd.read_csv(r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData2.csv')
 randomState = 42
 dataX = df['text']
-dataY = keras.utils.to_categorical(df['overall'] - 1, 2)  # Converting to one-hot vector to classify the data
+dataY = keras.utils.to_categorical(df['overall'] - 1, 3)  # Converting to one-hot vector to classify the data
 
 # Splitting the data
 xTrain, xTest, yTrain, yTest = train_test_split(dataX, dataY, test_size=0.30, random_state=randomState)
@@ -55,9 +53,6 @@ xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 # Load the model
 loaded_model = load_model(r'C:\Users\Ale\UPB\Inteligencia Artificial\Model2Categories')
 
-loss, accuracy = loaded_model.evaluate(xTest, yTest)
-print('Test Loss:', loss)
-print('Test Accuracy:',  accuracy)
 # Ejemplo de uso
 #text = "El producto es excelente y cumple con todas mis expectativas."
 predicted_label = predict_text(string2, loaded_model, wordTokenizer, maxLen)
