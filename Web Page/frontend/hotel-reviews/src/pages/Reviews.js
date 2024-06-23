@@ -76,7 +76,7 @@ const Reviews = () => {
 
     return (
         <div className='reviews'>
-            <Header text="Reviews" />
+            <Header text="Hotel Reviews" />
             <div className='reviewList'>
                 <h1>Review list for Hotel: {id}</h1>
                 <button 

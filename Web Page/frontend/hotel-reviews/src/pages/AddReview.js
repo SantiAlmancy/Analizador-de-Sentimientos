@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../components/Header';
 import './AddReview.css';
 
 const AddReview = ({ props }) => {
@@ -29,21 +30,24 @@ const AddReview = ({ props }) => {
     };
 
     return (
-        <div className="addReview">
-            <h1>Add Review for Hotel: {id}</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Review Text:
-                    <textarea name="text" value={review.text} onChange={handleChange} />
-                </label>
-                <button type="button" onClick={handleButtonClick}>Check Review's Category</button>
-                {showValue && (
-                    <>
-                        <p>Value: {review.value}</p>
-                        <button type="submit">Submit</button>
-                    </>
-                )}
-            </form>
+        <div className='addReview'>
+            <Header text="Hotel Reviews" />
+            <div className="addReviewContainer">
+                <h1>Add Review for Hotel: {id}</h1>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Review Text:
+                        <textarea name="text" value={review.text} onChange={handleChange} />
+                    </label>
+                    <button type="button" className='button' onClick={handleButtonClick}>Check Review's Category</button>
+                    {showValue && (
+                        <>
+                            <p>Value: {review.value}</p>
+                            <button type="submit" className='button'>Submit</button>
+                        </>
+                    )}
+                </form>
+            </div>
         </div>
     );
 };
