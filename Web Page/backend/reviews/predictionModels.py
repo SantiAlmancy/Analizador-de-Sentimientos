@@ -28,3 +28,18 @@ class Model:
         # Initialize other parameters if needed
         self.maxLen = 250  # Maximum sequence length expected by the model
 
+    def preprocess_text(self, text, isTensor=False):
+        text = modelInputPreprocess.preprocessTextInput(text)
+        print(text)
+        if (isTensor):
+            # Tokenize and pad the input text
+            tokenizer = Tokenizer()
+            tokenizer.fit_on_texts([text])
+            sequence = tokenizer.texts_to_sequences([text])
+            padded_sequence = pad_sequences(sequence, padding='post', maxlen=self.maxLen)
+            
+            return padded_sequence
+        else:
+            return text
+
+    
