@@ -283,3 +283,4 @@ $RECYCLE.BIN/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,windows,macos
