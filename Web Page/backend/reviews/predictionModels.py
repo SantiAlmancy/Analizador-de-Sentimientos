@@ -42,4 +42,17 @@ class Model:
         else:
             return text
 
-    
+    def predict_text(self, text):
+        # Preprocess the text
+        processed_text = self.preprocess_text(text, True)
+        
+        # Make prediction
+        prediction = self.model.predict(processed_text)
+        
+        # Convert prediction to a category or class label
+        predicted_category = np.argmax(prediction, axis=-1)
+
+        # Assuming binary classification: 0 - Negative, 1 - Positive
+        predicted_label = "Positive" if predicted_category[0] == 1 else "Negative"
+
+        return predicted_label
