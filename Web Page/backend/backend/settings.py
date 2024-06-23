@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from huggingface_hub import login
+import os
+
+# Token de Hugging Face & Login
+HUGGINGFACE_TOKEN = "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"
+login(token=HUGGINGFACE_TOKEN)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
