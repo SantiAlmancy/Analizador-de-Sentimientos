@@ -96,3 +96,30 @@ class HuggingFacePredictionView(APIView):
         review_instance = Review.objects.create(**review_data)
         serializer = ReviewSerializer(review_instance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class KerasModelPredictionView(APIView):
+    def post(self, request):
+        text = request.data.get("text", "")
+        hotel_id = request.data.get("hotel_id", "")
+        title = request.data.get("title", "")
+
+        if not text or not hotel_id or not title:
+            return Response({"error": "Missing required fields: text, hotel_id, title"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            hotel = Hotel.objects.get(hotel_id=hotel_id)
+        except Hotel.DoesNotExist:
+            return Response({"error": f"Hotel with ID {hotel_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Preprocess text and get prediction
+        pred = models.predict_text(text).lower()
+
+        review_data = {
+            "hotel": hotel,
+            "title": title,
+            "review": text,
+            "value": pred
+        }
+        review_instance = Review.objects.create(**review_data)
+        serializer = ReviewSerializer(review_instance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
