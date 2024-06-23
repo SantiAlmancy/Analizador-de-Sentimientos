@@ -13,8 +13,7 @@ class Review(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
     title = models.CharField(max_length=255)
     review = models.TextField()
-    value = models.CharField(max_length=10, choices=[('positive', 'Positive'), ('negative', 'Negative')])
+    value = models.CharField(max_length=20, choices = [('positive', 'Positive'), ('very_positive', 'Very Positive'), ('negative', 'Negative'), ('very_negative', 'Very Negative')])
 
     def __str__(self):
         return self.title
-
