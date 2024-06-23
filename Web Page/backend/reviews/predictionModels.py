@@ -41,6 +41,20 @@ class Model:
             return padded_sequence
         else:
             return text
+        
+    def mapLabels(self, prediction):
+        label_map = {
+                "LABEL_0": "negative",
+                "LABEL_1": "very_negative",
+                "LABEL_2": "neutral",
+                "LABEL_3": "positive",
+                "LABEL_4": "very_positive"
+            }
+
+        highest_score_label = max(prediction[0], key=lambda x: x['score'])['label']
+        mapped_label = label_map[highest_score_label]
+        
+        return mapped_label
 
     def predict_text(self, text):
         # Preprocess the text
