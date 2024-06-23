@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../components/Table';
 import Header from '../components/Header';
 import ReviewText from '../components/ReviewText';
+import AddReview from '../pages/AddReview';
 import './Reviews.css';
 
 const Reviews = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         console.log(id);
@@ -61,12 +64,27 @@ const Reviews = () => {
         }
     ];
 
+    const handleButtonClick = () => {
+        navigate(`/add-review/${id}`); 
+        setShowForm(true);
+    };
+
+    const handleFormSubmit = (id, review) => {
+        console.log(`Review submitted for Hotel ID ${id}:`, review);
+        setShowForm(false);
+    };
+
     return (
         <div className='reviews'>
             <Header text="Reviews" />
             <div className='reviewList'>
                 <h1>Review list for Hotel: {id}</h1>
                 <Table columns={columns} data={data} height={'520px'} />
+                <button 
+                    className="rowButton"
+                    onClick={handleButtonClick}>
+                    Add Review</button>
+                {showForm && <AddReview onSubmit={handleFormSubmit} />}
             </div>
         </div>
     );
