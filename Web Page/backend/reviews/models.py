@@ -1,3 +1,4 @@
+# reviews/models.py
 from django.db import models
 
 class Hotel(models.Model):
@@ -13,6 +14,7 @@ class Review(models.Model):
     hotel = models.ForeignKey(Hotel, related_name='reviews', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     review = models.TextField()
+    value = models.CharField(max_length=8, choices=[('positive', 'Positive'), ('negative', 'Negative')], default='positive')
 
     def __str__(self):
         return self.title
