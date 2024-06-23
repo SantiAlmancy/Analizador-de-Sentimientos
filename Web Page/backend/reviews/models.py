@@ -10,11 +10,11 @@ class Hotel(models.Model):
         return self.hotel_name
 
 class Review(models.Model):
-    review_id = models.CharField(max_length=10, primary_key=True)
-    hotel = models.ForeignKey(Hotel, related_name='reviews', on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
+    title = models.CharField(max_length=255)
     review = models.TextField()
-    value = models.CharField(max_length=8, choices=[('positive', 'Positive'), ('negative', 'Negative')], default='positive')
+    value = models.CharField(max_length=10, choices=[('positive', 'Positive'), ('negative', 'Negative')])
 
     def __str__(self):
         return self.title
+

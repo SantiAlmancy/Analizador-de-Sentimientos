@@ -23,29 +23,11 @@ class HotelReviewListView(APIView):
 
 class CreateReviewView(APIView):
     def post(self, request):
-        data = request.data
-        hotel_id = data.get('hotel_id')
-        comment = data.get('comment')
-        text = data.get('text')
-
-        # Validate hotel_id
-        try:
-            hotel = Hotel.objects.get(id=hotel_id)
-        except Hotel.DoesNotExist:
-            return Response({"message": "Unable to create review", "detail": f"Hotel with id {hotel_id} does not exist."}, status=status.HTTP_404_NOT_FOUND)
-        
-        # Validate comment and text
-        if not comment:
-            return Response({"message": "Unable to create review", "detail": "Comment field cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
-        if not text:
-            return Response({"message": "Unable to create review", "detail": "Text field cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Create and save the review
-        review = Review(hotel=hotel, comment=comment, text=text)
-        review.save()
-
-        serializer = ReviewSerializer(review)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateHotelView(APIView):
     def post(self, request):
@@ -54,19 +36,26 @@ class CreateHotelView(APIView):
         if not isinstance(data, list):
             return Response({"message": "Invalid data format", "detail": "Expected a list of hotel objects."}, status=status.HTTP_400_BAD_REQUEST)
 
+        errors = []
+        created_hotels = []
+
         for hotel_data in data:
             hotel_id = hotel_data.get('hotel_id')
-            hotel_name = hotel_data.get('hotel_name')
             hotel_class = hotel_data.get('hotel_class')
 
-            if not hotel_name:
-                return Response({"message": "Unable to create hotel", "detail": "Hotel name field cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
-            if not (1 <= hotel_class <= 5):
-                return Response({"message": "Unable to create hotel", "detail": "Hotel class must be between 1 and 5."}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if hotel_id already exists
             if Hotel.objects.filter(hotel_id=hotel_id).exists():
-                return Response({"message": "Unable to create hotel", "detail": f"Hotel with id {hotel_id} already exists."}, status=status.HTTP_400_BAD_REQUEST)
+                errors.append({"message": "Unable to create hotel", "detail": f"Hotel with id {hotel_id} already exists."})
+                continue
 
-            hotel = Hotel(hotel_id=hotel_id, hotel_name=hotel_name, hotel_class=hotel_class)
-            hotel.save()
+            serializer = HotelSerializer(data={"hotel_id": hotel_id, "hotel_class": hotel_class})
+            if serializer.is_valid():
+                serializer.save()
+                created_hotels.append(serializer.data)
+            else:
+                errors.append(serializer.errors)
 
-        return Response({"message": "Hotels created successfully"}, status=status.HTTP_201_CREATED)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Hotels created successfully", "hotels": created_hotels}, status=status.HTTP_201_CREATED)
