@@ -14,7 +14,7 @@ const Hotels = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const result = await getHotels('endpoint');
+            const result = await getHotels();
             setData(result);
           } catch (err) {
             console.error(err);
