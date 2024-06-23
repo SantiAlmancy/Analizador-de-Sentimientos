@@ -83,7 +83,7 @@ if __name__ == "__main__":
     vocabLength = len(wordTokenizer.word_index) + 1
 
     # Padding all reviews to fixed length 100
-    maxLen = 100
+    maxLen = 250
     xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
     xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 
