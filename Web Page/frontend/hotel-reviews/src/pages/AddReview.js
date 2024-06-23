@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './AddReview.css';
 
-const AddReview = ({ onSubmit }) => {
+const AddReview = ({ props }) => {
     const { id } = useParams();
     const [review, setReview] = useState({
         value: 'Positive',  // Static value
@@ -21,7 +21,7 @@ const AddReview = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle the form submission logic here
-        onSubmit(id, review);  // Pass the review data to the parent component
+        props.onSubmit(id, review);  // Pass the review data to the parent component
     };
 
     const handleButtonClick = () => {

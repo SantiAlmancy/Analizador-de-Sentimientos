@@ -79,11 +79,11 @@ const Reviews = () => {
             <Header text="Reviews" />
             <div className='reviewList'>
                 <h1>Review list for Hotel: {id}</h1>
-                <Table columns={columns} data={data} height={'520px'} />
                 <button 
-                    className="rowButton"
+                    className="addReviewButton"
                     onClick={handleButtonClick}>
                     Add Review</button>
+                <Table columns={columns} data={data} height={'520px'} />
                 {showForm && <AddReview onSubmit={handleFormSubmit} />}
             </div>
         </div>
