@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Hotel, Review
 from .serializers import HotelSerializer, ReviewSerializer
+from transformers import pipeline
 
 class HotelListView(APIView):
     def get(self, request):
@@ -59,3 +60,14 @@ class CreateHotelView(APIView):
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message": "Hotels created successfully", "hotels": created_hotels}, status=status.HTTP_201_CREATED)
+    
+class TextClassificationView(APIView):
+    def post(self, request):
+        classifier = pipeline("text-classification", model="Almancy/finetuning-emotion-model-5")
+        text = request.data.get("text", "")
+        
+        if not text:
+            return Response({"error": "No text provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        pred = classifier(text, return_all_scores=True)
+        return Response(pred, status=status.HTTP_200_OK)
