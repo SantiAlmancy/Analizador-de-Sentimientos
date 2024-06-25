@@ -1,0 +1,28 @@
+.reviewList h1 {
+    color: #0e182a;
+    font-size: 45px;
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.addReviewButton {
+    background-color: #0e182a;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 20px;
+    padding: 13px 20px 13px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.addReviewButton:hover {
+    background-color: #f5b042;
+}
+
+.reviewList {
+    padding-bottom: 10px;
+}
