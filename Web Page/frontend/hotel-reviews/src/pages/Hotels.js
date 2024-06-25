@@ -63,7 +63,7 @@ const Hotels = () => {
 
     return (
         <div className='hotels'>
-            <Header text="Hotel Reviews" />
+            <Header text="Hotel Reviews" showButton={false}/>
             <Banner />
             <div className='hotelList'>
                 <h1>Hotel list</h1>
