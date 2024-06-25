@@ -69,10 +69,9 @@ class HuggingFacePredictionView(APIView):
     def post(self, request):
         text = request.data.get("text", "")
         hotel_id = request.data.get("hotel_id", "")
-        title = request.data.get("title", "")
 
-        if not text or not hotel_id or not title:
-            return Response({"error": "Text, hotel_id, and title are required."}, status=status.HTTP_400_BAD_REQUEST)
+        if not text or not hotel_id:
+            return Response({"error": "Text and hotel_id are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             hotel = Hotel.objects.get(hotel_id=hotel_id)
@@ -89,7 +88,6 @@ class HuggingFacePredictionView(APIView):
         # Create Review object
         review_data = {
             "hotel": hotel,
-            "title": title,
             "review": text,  # Save original text
             "value": predicted_label
         }
@@ -101,10 +99,9 @@ class KerasModelPredictionView(APIView):
     def post(self, request):
         text = request.data.get("text", "")
         hotel_id = request.data.get("hotel_id", "")
-        title = request.data.get("title", "")
 
-        if not text or not hotel_id or not title:
-            return Response({"error": "Missing required fields: text, hotel_id, title"}, status=status.HTTP_400_BAD_REQUEST)
+        if not text or not hotel_id:
+            return Response({"error": "Missing required fields: text and hotel_id"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             hotel = Hotel.objects.get(hotel_id=hotel_id)
@@ -116,7 +113,6 @@ class KerasModelPredictionView(APIView):
 
         review_data = {
             "hotel": hotel,
-            "title": title,
             "review": text,
             "value": pred
         }
