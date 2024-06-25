@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import './AddReview.css';
+import analyzeReview from '../services/AnalizeReviews';
 
-const AddReview = ({ props }) => {
+const AddReview = () => {
     const { id } = useParams();
     const [review, setReview] = useState({
-        value: 'Positive',  // Static value
+        value: '',  // Initially empty
         text: ''
     });
     const [showValue, setShowValue] = useState(false);  // State to control visibility
@@ -19,14 +20,17 @@ const AddReview = ({ props }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle the form submission logic here
-        props.onSubmit(id, review);  // Pass the review data to the parent component
-    };
-
-    const handleButtonClick = () => {
-        setShowValue(true);  // Show the value when button is clicked
+    const handleButtonClick = async () => {
+        try {
+            const data = await analyzeReview(review.text, id);
+            setReview(prevReview => ({
+                ...prevReview,
+                value: data.value  // Update the value with the prediction result
+            }));
+            setShowValue(true);  // Show the value when button is clicked
+        } catch (error) {
+            console.error('Error fetching review category:', error);
+        }
     };
 
     return (
@@ -34,18 +38,13 @@ const AddReview = ({ props }) => {
             <Header text="Hotel Reviews" />
             <div className="addReviewContainer">
                 <h1>Add Review for Hotel: {id}</h1>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <label>
                         Review Text:
                         <textarea name="text" value={review.text} onChange={handleChange} />
                     </label>
                     <button type="button" className='button' onClick={handleButtonClick}>Check Review's Category</button>
-                    {showValue && (
-                        <>
-                            <p>Value: {review.value}</p>
-                            <button type="submit" className='button'>Submit</button>
-                        </>
-                    )}
+                    {showValue && <p>Value: {review.value}</p>}
                 </form>
             </div>
         </div>
