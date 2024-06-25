@@ -12,7 +12,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('hotel_id', 'title', 'review', 'value')
+        fields = ('hotel_id', 'review', 'value')
 
     def create(self, validated_data):
         hotel_id = validated_data.pop('hotel_id')
@@ -25,9 +25,4 @@ class ReviewSerializer(serializers.ModelSerializer):
     def validate_hotel_id(self, value):
         if not value:
             raise serializers.ValidationError({"hotel_id": "This field is required."})
-        return value
-
-    def validate_title(self, value):
-        if not value:
-            raise serializers.ValidationError({"title": "This field is required."})
         return value
