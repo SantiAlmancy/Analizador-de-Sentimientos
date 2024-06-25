@@ -2,7 +2,7 @@ const API_URL = "http://127.0.0.1:8000";
 
 const analyzeReview = async (text, hotel_id) => {
   try {
-    const response = await fetch(`${API_URL}/keras-predict/`, {
+    const response = await fetch(`${API_URL}/api/keras-predict/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
