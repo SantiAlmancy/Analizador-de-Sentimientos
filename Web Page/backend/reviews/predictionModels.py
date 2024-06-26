@@ -14,7 +14,7 @@ class Model:
         self.env = environ.Env()
         environ.Env.read_env()
         # Load the Keras model
-        self.model = load_model(r'C:\Users\PC\Documents\Dank\Model2Categories')
+        self.model = load_model('../../Resources/Model2Categories')
         # Load the transformer model
         self.classifier = pipeline("text-classification", model="Almancy/finetuning-emotion-model")
         # Maximum length for keras model
@@ -34,7 +34,7 @@ class Model:
             return text
         
     def createTokenizer(self):
-        df = pd.read_csv(r'C:\Users\PC\Documents\Dank\preprocessedData2.csv')
+        df = pd.read_csv('../../Resources/preprocessedData2.csv')
         dataX = df['text']
         wordTokenizer = Tokenizer()
         wordTokenizer.fit_on_texts(dataX)
@@ -48,7 +48,6 @@ class Model:
                 "LABEL_3": "positive",
                 "LABEL_4": "very_positive"
             }
-
         highest_score_label = max(prediction[0], key=lambda x: x['score'])['label']
         mapped_label = label_map[highest_score_label]
         return mapped_label
