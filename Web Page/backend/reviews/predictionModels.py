@@ -1,13 +1,11 @@
-# reviews/model.py
 import pandas as pd
-import numpy as np
-from keras_preprocessing.text import Tokenizer
-from keras_preprocessing.sequence import pad_sequences
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
 from transformers import pipeline
 import environ
 import sys
-sys.path.append(r'C:\Users\Ale\UPB\Inteligencia Artificial\Analizador-de-Sentimientos\Model\Data')
+sys.path.append('../../Model/Data')
 import modelInputPreprocess
 
 class Model:
@@ -20,7 +18,7 @@ class Model:
         #self.KERAS_MODEL_PATH = self.env("KERAS_MODEL_PATH")
         
         # Load the Keras model
-        self.model = load_model(r'C:\Users\Ale\UPB\Inteligencia Artificial\Model2Categories')
+        self.model = load_model(r'C:\Users\PC\Documents\Dank\Model2Categories')
 
         # Load the transformer model
         self.classifier = pipeline("text-classification", model="Almancy/finetuning-emotion-model")
@@ -43,7 +41,7 @@ class Model:
             return text
         
     def createTokenizer(self):
-        df = pd.read_csv(r'C:\Users\Ale\UPB\Inteligencia Artificial\preprocessedData2.csv')
+        df = pd.read_csv(r'C:\Users\PC\Documents\Dank\preprocessedData2.csv')
         dataX = df['text']
         wordTokenizer = Tokenizer()
         wordTokenizer.fit_on_texts(dataX)

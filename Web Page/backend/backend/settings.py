@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from huggingface_hub import login
-import os
 
 # Token de Hugging Face & Login
 HUGGINGFACE_TOKEN = "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"
