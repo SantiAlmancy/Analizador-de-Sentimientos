@@ -2,7 +2,7 @@ import pandas as pd
 import keras
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
-from keras_preprocessing.sequence import pad_sequences
+from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
 import argparse
 

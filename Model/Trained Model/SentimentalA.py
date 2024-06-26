@@ -5,7 +5,7 @@ from numpy import asarray
 from numpy import zeros
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
-from keras_preprocessing.sequence import pad_sequences
+from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Embedding, LSTM, Dense, Dropout, Bidirectional
 from keras.regularizers import l2
@@ -13,14 +13,14 @@ from keras.regularizers import l2
 # Creating embeddings dictionary with pretrained data
 def createEmbeddingsDictionary():
     embeddingsDictionary = dict()
-    path = r'C:\Users\Ale\UPB\Inteligencia Artificial\glove.6B.100d.txt'
-    gloveFile = open(path, encoding="utf8")
+    EMBEDDING_FILE_PATH = os.getenv("EMBEDDING_FILE_PATH")
+    gloveFile = open(EMBEDDING_FILE_PATH, encoding="utf8")
 
     for line in gloveFile:
         records = line.split()
         word = records[0]
-        vector_dimensions = asarray(records[1:], dtype='float32')
-        embeddingsDictionary [word] = vector_dimensions
+        vectorDimensions = asarray(records[1:], dtype='float32')
+        embeddingsDictionary [word] = vectorDimensions
     gloveFile.close()
 
     return embeddingsDictionary
@@ -37,13 +37,13 @@ def createEmbeddingMatrix(vocabLength, wordTokenizer):
     return embeddingMatrix
 
 # Creation of the model
-def createRNNModel(embeddingMatrix, vocabLength, maxLen):
+def createLSTMModel(embeddingMatrix, vocabLength, maxLen):
     model = Sequential()
     model.add(Embedding(vocabLength, 100, weights=[embeddingMatrix], input_length=maxLen, trainable=True))
     model.add(Bidirectional(LSTM(256, return_sequences=True, kernel_regularizer=l2(0.03))))
     model.add(Dropout(0.2))  # Adding Dropout for regularization
     model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.03))))
-    model.add(Dense(2, activation='sigmoid'))  # 5 units due to we have 5 categories
+    model.add(Dense(2, activation='sigmoid'))
 
     model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
@@ -98,7 +98,7 @@ embeddingMatrix = createEmbeddingMatrix(vocabLength, wordTokenizer)
 print(embeddingMatrix.shape)
 
 # Creating the model
-model = createRNNModel(embeddingMatrix, vocabLength, maxLen)
+model = createLSTMModel(embeddingMatrix, vocabLength, maxLen)
 
 # Training the model
 model.fit(xTrain, yTrain, epochs=14, validation_split=0.2)
