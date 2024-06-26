@@ -20,14 +20,13 @@ class Model:
         # Maximum length for keras model
         self.maxLen = 250
         # Tokenizer created with data csv
-        self.wordTokenizer = self.createTokenizer()
+        self.word_tokenizer = self.createTokenizer()
 
-    def preprocess_text(self, text, isTensor=False):
+    def preprocess_text(self, text, is_tensor=False):
         text = modelInputPreprocess.preprocessTextInput(text)
-        print(text)
-        if (isTensor):
+        if (is_tensor):
             # Tokenize and pad the input text
-            sequence = self.wordTokenizer.texts_to_sequences([text])
+            sequence = self.word_tokenizer.texts_to_sequences([text])
             padded_sequence = pad_sequences(sequence, padding='post', maxlen=self.maxLen)
             return padded_sequence
         else:
@@ -35,10 +34,10 @@ class Model:
         
     def createTokenizer(self):
         df = pd.read_csv('../../Resources/preprocessedData2.csv')
-        dataX = df['text']
-        wordTokenizer = Tokenizer()
-        wordTokenizer.fit_on_texts(dataX)
-        return wordTokenizer
+        data_x = df['text']
+        word_tokenizer = Tokenizer()
+        word_tokenizer.fit_on_texts(data_x)
+        return word_tokenizer
         
     def mapLabels(self, prediction):
         label_map = {
