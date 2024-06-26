@@ -5,8 +5,8 @@ import py3langid as langid
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm 
 
-# Returns the number of words in the text
 def countWords(text):
+    # Returns the number of words in the text
     return len(text.split())
 
 def detectLanguage(text):
@@ -50,7 +50,7 @@ def distributeDataFive(dataframe):
     # Sort by 'num_helpful_votes' (descending) within each 'overall' group (ascending)
     sortedData = filteredData.sort_values(by=['overall', 'num_helpful_votes'], ascending=[True, False])
 
-    # Group by 'overall' and take the first min_count rows from each group
+    # Group by 'overall' and take the first minCount rows from each group
     newData = sortedData.groupby('overall').head(minCount).reset_index(drop=True)
 
     # Shuffle the data to remove grouping by 'overall'
@@ -62,7 +62,7 @@ def distributeDataThree(dataframe):
     # Filter out records where 'overall' is 0
     filteredData = dataframe[dataframe['overall'] != 0]
 
-    # Create a dataframe for each category
+    # Create a dataframe for each category (negative, neutral, positive)
     dfNeg = filteredData[filteredData['overall'] < 3]
     dfNeu = filteredData[filteredData['overall'] == 3]
     dfPos = filteredData[filteredData['overall'] > 3]
@@ -130,9 +130,8 @@ def distributeDataTwo(dataframe):
     return shuffledDf
 
 if __name__ == "__main__":
+    # Import the reviews data
     pathOriginalData = os.getenv('ORIGINAL_DATA_PATH')
-
-    # Import the data
     data = pd.read_csv(pathOriginalData)
 
     # Remove rows with null values
@@ -160,8 +159,8 @@ if __name__ == "__main__":
     # Show the initial data distribution after the language filtering
     showDataDistribution(data,'overall','Initial data distribution')
 
+    # Distribute data according to the corresponding categories
     data = distributeDataThree(data)
-    
     print(data)
 
     # Show the new data distribution after the distribution of data
