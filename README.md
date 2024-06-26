@@ -1,5 +1,6 @@
 
 # Sentiment Analyzer from Hotel Reviews
+![D-90-148-](https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/7128060e-ca60-4926-aec5-7c96b1d5ef19)
 
 This proyect will predict if the comment introduced is either positive or negative based on a trainning with hundred of thounsands of comments from many websites and hotels.
 
