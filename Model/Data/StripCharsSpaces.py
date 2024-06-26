@@ -11,8 +11,8 @@ def singleCharacterRemoval(sentence):
 
 # Creates a regex pattern to match any character from charsList, treating them literally.
 def specialCharacterRemoval(sentence, charsList):
-   regex_pattern = '[' + re.escape(''.join(charsList)) + ']'
-   return re.sub(regex_pattern, ' ', sentence)
+   regexPattern = '[' + re.escape(''.join(charsList)) + ']'
+   return re.sub(regexPattern, ' ', sentence)
 
 # \s+ matches one or more whitespace characters.
 def removeMultipleSpaces(sentence):

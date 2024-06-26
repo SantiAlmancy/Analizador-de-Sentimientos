@@ -131,8 +131,8 @@ def distributeDataTwo(dataframe):
 
 if __name__ == "__main__":
     # Import the reviews data
-    pathOriginalData = os.getenv('ORIGINAL_DATA_PATH')
-    data = pd.read_csv(pathOriginalData)
+    ORIGINAL_DATA_PATH = os.getenv('ORIGINAL_DATA_PATH')
+    data = pd.read_csv(ORIGINAL_DATA_PATH)
 
     # Remove rows with null values
     data.dropna()
@@ -182,5 +182,5 @@ if __name__ == "__main__":
     print(data)
 
     # Generate a csv file of new data without index numbers
-    pathFilteredData = os.getenv('FILTERED_DATA_PATH')
-    data.to_csv(pathFilteredData, index=False)
+    FILTERED_DATA_PATH = os.getenv('FILTERED_DATA_PATH')
+    data.to_csv(FILTERED_DATA_PATH, index=False)

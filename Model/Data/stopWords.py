@@ -14,7 +14,7 @@ def removeStopWords(sentence):
   # Tokenize
   tokens = nltk.word_tokenize(sentence)
   # Filter stop words
-  filtered_tokens = [token for token in tokens if token.lower() not in stopWords]
+  filteredTokens = [token for token in tokens if token.lower() not in stopWords]
 
-  processed_text = ' '.join(filtered_tokens)
-  return processed_text
+  processedText = ' '.join(filteredTokens)
+  return processedText
