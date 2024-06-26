@@ -1,6 +1,10 @@
 import os
 # Deactivate oneDNN to avoid slightly different numerical results due to floating-point round-off error
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+# Info and warning messages of tensorflow are not printed, only errors
+import logging
+import tensorflow as tf
+tf.get_logger().setLevel(logging.ERROR)
 import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
