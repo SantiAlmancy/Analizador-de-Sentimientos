@@ -1,3 +1,6 @@
+import os
+# Deactivate oneDNN to avoid slightly different numerical results due to floating-point round-off error
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
@@ -47,7 +50,7 @@ class Model:
                 "LABEL_3": "positive",
                 "LABEL_4": "very_positive"
             }
-        highest_score_label = max(prediction[0], key=lambda x: x['score'])['label']
+        highest_score_label = max(prediction, key=lambda x: x['score'])['label']
         mapped_label = label_map[highest_score_label]
         return mapped_label
 
