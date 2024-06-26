@@ -81,15 +81,13 @@ if __name__ == "__main__":
     # Adding 1 to store dimensions for words for which no pretrained word embeddings exist
     vocabLength = len(wordTokenizer.word_index) + 1
 
-    # Padding all reviews to fixed length 100
+    # Padding all reviews to fixed length 250
     maxLen = 250
     xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
     xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 
     # Creating embedding matrix
     embeddingMatrix = createEmbeddingMatrix(vocabLength, wordTokenizer)
-
-    print(embeddingMatrix.shape)
 
     # Creating the model
     model = createRNNModel(embeddingMatrix, vocabLength, maxLen)
