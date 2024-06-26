@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from huggingface_hub import login
 
-# Token de Hugging Face & Login
+# Hugging face token for writing permissions
 HUGGINGFACE_TOKEN = "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"
 login(token=HUGGINGFACE_TOKEN)
 

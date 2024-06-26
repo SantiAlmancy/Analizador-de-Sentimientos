@@ -80,14 +80,12 @@ class HuggingFacePredictionView(APIView):
         # Preprocess text and get prediction
         processed_text = models.preprocess_text(text)
         prediction = models.classifier(processed_text, return_all_scores=True)
-        
         # Map predicted label
         predicted_label = models.mapLabels(prediction).lower()
-
         # Create Review object
         review_data = {
             "hotel": hotel,
-            "review": text,  # Save original text
+            "review": text,
             "value": predicted_label
         }
         review_instance = Review.objects.create(**review_data)
@@ -107,9 +105,9 @@ class KerasModelPredictionView(APIView):
         except Hotel.DoesNotExist:
             return Response({"error": f"Hotel with ID {hotel_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Preprocess text and get prediction
+        # Preprocess text and get prediction label
         pred = models.predict_text(text).lower()
-
+        # Create Review object
         review_data = {
             "hotel": hotel,
             "review": text,

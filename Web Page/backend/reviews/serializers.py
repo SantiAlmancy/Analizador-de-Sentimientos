@@ -7,16 +7,14 @@ class HotelSerializer(serializers.ModelSerializer):
         fields = ('hotel_id', 'hotel_name', 'hotel_class')
 
 class ReviewSerializer(serializers.ModelSerializer):
-    hotel_id = serializers.RegexField(regex=r'^H\d{5}$', error_messages={'invalid': 'Hotel ID must be in the format H00001'})  # Updated to accept specific format
+    hotel_id = serializers.RegexField(regex=r'^H\d{5}$', error_messages={'invalid': 'Hotel ID must be in the format H00001'})
 
     class Meta:
         model = Review
         fields = ('hotel_id', 'review', 'value')
 
     def create(self, validated_data):
-        hotel_id = validated_data.pop('hotel_id')
-        # Additional logic to handle the hotel_id as needed
-    
+        hotel_id = validated_data.pop('hotel_id')  
         # Create Review object
         review = Review.objects.create(hotel_id=hotel_id, **validated_data)
         return review
