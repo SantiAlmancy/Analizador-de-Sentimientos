@@ -9,6 +9,18 @@ This proyect will predict if the comment introduced is either positive or negati
 
 ## Objective
 The objective of this project is to be able to detect what kind of sentiment is expressing the review from an hotel. This tool will help owners to take better and strategic desitions for their business.
+
+## Tecnologies used for the web app
+1. **BackEnd**
+   - Django
+   - Djando REST Framework 
+3. **FrontEnd**
+   - React
+   - React DOM
+   - Babel
+   - ESLint
+   - React Router
+
 ## Installation
 In order to try out the sentiment analyzer first you need to install the requirements.
 Make sure you have Python 3.11 installed. You can download it from [python.org](https://www.python.org/downloads/).
