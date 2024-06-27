@@ -2,7 +2,8 @@
 # Sentiment Analyzer from Hotel Reviews
 
 
-https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/3da011a9-1ca9-4083-85ac-88ad0334bc7e
+
+https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/9f8dab57-fbba-4786-be9e-2e9fa84a5caa
 
 
 
