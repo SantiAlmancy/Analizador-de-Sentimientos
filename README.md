@@ -10,17 +10,6 @@ This proyect will predict if the comment introduced is either positive or negati
 ## Objective 🏆
 The objective of this project is to be able to detect what kind of sentiment is expressing the review from an hotel. This tool will help owners to take better and strategic desitions for their business.
 
-## Tecnologies used for the web app ⚒️
-1. **BackEnd**
-   - Django
-   - Djando REST Framework 
-3. **FrontEnd**
-   - React
-   - React DOM
-   - Babel
-   - ESLint
-   - React Router
-
 ## Installation ⚙️
 In order to try out the sentiment analyzer first you need to install the requirements.
 Make sure you have Python 3.11 installed. You can download it from [python.org](https://www.python.org/downloads/).
@@ -43,6 +32,17 @@ To set up the environment using `requirements.txt`, follow these steps:
 - **Install the dependencies**:
     ```sh
     pip install -r requirements.txt
+
+## Technologies used for the web app ⚒️
+1. **BackEnd**
+   - Django
+   - Djando REST Framework 
+3. **FrontEnd**
+   - React
+   - React DOM
+   - Babel
+   - ESLint
+   - React Router
 
 ## Deployment ☁️
 
@@ -96,16 +96,55 @@ To deploy this project run
 | `api_key` | `string` | **Required**. Your API key |
 
 
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
-
 
 ## Documentation 📚
 
 - For more information, you can checkout our [Official Documentation](https://docs.google.com/document/d/1FK-aOhOsSnqMsrD8_Bw9apPNRCgE5sskCMFg69owqPM/edit?usp=sharing).
 - And to check our resources, visit the [Google Drive Folder]().
 
+## FAQ 🤔
+
+#### How to run the backend?
+
+You need to follow these commands:
+- **Make Migrations**: Create new migrations based on the changes detected in your models.
+    ```bash
+    python manage.py makemigrations
+    ```
+
+- **Apply Migrations**: Apply the migrations to your database.
+    ```bash
+    python manage.py migrate
+    ```
+
+- **Start the Server**: Start the development server.
+    ```bash
+    python manage.py runserver
+    ```
+
+#### How to run the frontend?
+
+- **Build the Project**: Build the project for production.
+    ```bash
+    npm run build
+    ```
+
+- **Start the Server**: Start the production server.
+    ```bash
+    npm start
+    ```
+
+#### How many languages does the model detect?
+
+At the moment just English. Spanish comming soon!
+
+#### What is Hugging Face?
+
+Hugging Face is a company specializing in natural language processing technologies and provides tools and models for building applications using machine learning.
+
+#### How many states has the sentiment analyzer?
+
+It has two states. Positive and Negative.
 
 ## Authors 4️⃣
 
@@ -113,4 +152,3 @@ Takes two numbers and returns the sum.
 - [@SantiAlmancy](https://github.com/SantiAlmancy)
 - [@SebastianItamari](https://github.com/SebastianItamari)
 - [@AleDiazT](https://github.com/AleDiazT)
-
