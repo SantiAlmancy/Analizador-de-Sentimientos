@@ -40,7 +40,8 @@ To set up the environment using `requirements.txt`, follow these steps:
     pip install -r requirements.txt
 
 ## Demo ▶️
-https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/9f8dab57-fbba-4786-be9e-2e9fa84a5caa
+![sa-demo](https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/806ba179-1ae2-46b4-96fb-f82a35a3ef18)
+
 
 ## Technologies used for the web app ⚒️
 1. **BackEnd**
