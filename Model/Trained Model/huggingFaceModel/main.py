@@ -14,7 +14,7 @@ def main():
     filepath = 'C:/Users/PC/Documents/IA/Model/Trained Model/huggingFaceModel/preprocessedData5.csv'
     output_dir = "finetuning-emotion-model-5"
 
-    login(token="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")
+    login(token="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")
     data_manager = DataManager(filepath)
     df = data_manager.read_data()
     if df is None:

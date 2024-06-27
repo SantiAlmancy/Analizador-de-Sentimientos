@@ -13,14 +13,14 @@ from keras.regularizers import l2
 # Creating embeddings dictionary with pretrained data
 def createEmbeddingsDictionary():
     embeddingsDictionary = dict()
-    path = os.getenv("EMBEDDING_FILE_PATH")
-    gloveFile = open(path, encoding="utf8")
+    EMBEDDING_FILE_PATH = os.getenv("EMBEDDING_FILE_PATH")
+    gloveFile = open(EMBEDDING_FILE_PATH, encoding="utf8")
 
     for line in gloveFile:
         records = line.split()
         word = records[0]
-        vector_dimensions = asarray(records[1:], dtype='float32')
-        embeddingsDictionary [word] = vector_dimensions
+        vectorDimensions = asarray(records[1:], dtype='float32')
+        embeddingsDictionary [word] = vectorDimensions
     gloveFile.close()
 
     return embeddingsDictionary
@@ -50,9 +50,9 @@ def createRNNModel(embeddingMatrix, vocabLength, maxLen):
     return model
 
 if __name__ == "__main__":
-    # Importing the data
-    dataPath = os.getenv("PREPROCESSED_DATA_PATH")
-    df = pd.read_csv(dataPath)
+    # Importing the preprocessed data with FIVE categories
+    PREPROCESSED_DATA_PATH = os.getenv("PREPROCESSED_DATA_PATH")
+    df = pd.read_csv(PREPROCESSED_DATA_PATH)
 
     # Number of samples per group
     nSamples = 7500
@@ -67,7 +67,6 @@ if __name__ == "__main__":
     # Creating data and its labels to training
     dataX = df['text']
     dataY = keras.utils.to_categorical(df['overall'] - 1, 5) # Converting to one-hot vector to classify the data
-    #print(dataY)
 
     # Splitting the data
     xTrain, xTest, yTrain, yTest = train_test_split(dataX, dataY, test_size=0.30, random_state=randomState)
@@ -82,15 +81,13 @@ if __name__ == "__main__":
     # Adding 1 to store dimensions for words for which no pretrained word embeddings exist
     vocabLength = len(wordTokenizer.word_index) + 1
 
-    # Padding all reviews to fixed length 100
+    # Padding all reviews to fixed length 250
     maxLen = 250
     xTrain = pad_sequences(xTrain, padding='post', maxlen=maxLen)
     xTest = pad_sequences(xTest, padding='post', maxlen=maxLen)
 
     # Creating embedding matrix
     embeddingMatrix = createEmbeddingMatrix(vocabLength, wordTokenizer)
-
-    print(embeddingMatrix.shape)
 
     # Creating the model
     model = createRNNModel(embeddingMatrix, vocabLength, maxLen)
