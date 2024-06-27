@@ -45,7 +45,7 @@ def createLSTMModel(embeddingMatrix, vocabLength, maxLen):
     model.add(Bidirectional(LSTM(128, return_sequences=False, kernel_regularizer=l2(0.03))))
     model.add(Dense(2, activation='sigmoid'))
 
-    model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='RMSprop', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
 def predictText(text, model, wordTokenizer, maxLen):
