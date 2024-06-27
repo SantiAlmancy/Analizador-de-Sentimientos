@@ -14,6 +14,7 @@ import environ
 import sys
 sys.path.append('../../Model/Data')
 import modelInputPreprocess
+from googletrans import Translator
 
 class Model:
     def __init__(self):
@@ -27,9 +28,12 @@ class Model:
         # Maximum length for keras model
         self.maxLen = 250
         # Tokenizer created with data csv
-        self.word_tokenizer = self.createTokenizer()
+        self.word_tokenizer = self.create_tokenizer()
 
     def preprocess_text(self, text, is_tensor=False):
+        # Translating to English
+        text = self.translate_to_english(text)
+        print(text)
         text = modelInputPreprocess.preprocessTextInput(text)
         if (is_tensor):
             # Tokenize and pad the input text
@@ -39,14 +43,14 @@ class Model:
         else:
             return text
         
-    def createTokenizer(self):
+    def create_tokenizer(self):
         df = pd.read_csv('../../Resources/preprocessedData2.csv')
         data_x = df['text']
         word_tokenizer = Tokenizer()
         word_tokenizer.fit_on_texts(data_x)
         return word_tokenizer
         
-    def mapLabels(self, prediction):
+    def map_labels(self, prediction):
         label_map = {
                 "LABEL_0": "very_negative",
                 "LABEL_1": "negative",
@@ -68,3 +72,9 @@ class Model:
         category_map = {0: 'negative', 1: 'positive'}
         predicted_label = category_map[predicted_category[0]]
         return predicted_label
+
+    
+    def translate_to_english(self, text):
+        translator = Translator()
+        translation = translator.translate(text, dest='en')
+        return translation.text

@@ -81,7 +81,7 @@ class HuggingFacePredictionView(APIView):
         processed_text = models.preprocess_text(text)
         prediction = models.classifier(processed_text, top_k=None)
         # Map predicted label
-        predicted_label = models.mapLabels(prediction).lower()
+        predicted_label = models.map_labels(prediction).lower()
         # Create Review object
         review_data = {
             "hotel": hotel,
