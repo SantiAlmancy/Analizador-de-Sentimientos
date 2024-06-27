@@ -1,4 +1,3 @@
-# reviews/models.py
 from django.db import models
 
 class Hotel(models.Model):

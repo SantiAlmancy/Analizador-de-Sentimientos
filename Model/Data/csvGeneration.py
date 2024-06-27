@@ -3,10 +3,9 @@ import pandas as pd
 import ast
 import py3langid as langid
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm 
 
-# Returns the number of words in the text
 def countWords(text):
+    # Returns the number of words in the text
     return len(text.split())
 
 def detectLanguage(text):
@@ -50,7 +49,7 @@ def distributeDataFive(dataframe):
     # Sort by 'num_helpful_votes' (descending) within each 'overall' group (ascending)
     sortedData = filteredData.sort_values(by=['overall', 'num_helpful_votes'], ascending=[True, False])
 
-    # Group by 'overall' and take the first min_count rows from each group
+    # Group by 'overall' and take the first minCount rows from each group
     newData = sortedData.groupby('overall').head(minCount).reset_index(drop=True)
 
     # Shuffle the data to remove grouping by 'overall'
@@ -62,7 +61,7 @@ def distributeDataThree(dataframe):
     # Filter out records where 'overall' is 0
     filteredData = dataframe[dataframe['overall'] != 0]
 
-    # Create a dataframe for each category
+    # Create a dataframe for each category (negative, neutral, positive)
     dfNeg = filteredData[filteredData['overall'] < 3]
     dfNeu = filteredData[filteredData['overall'] == 3]
     dfPos = filteredData[filteredData['overall'] > 3]
@@ -130,10 +129,9 @@ def distributeDataTwo(dataframe):
     return shuffledDf
 
 if __name__ == "__main__":
-    pathOriginalData = os.getenv('ORIGINAL_DATA_PATH')
-
-    # Import the data
-    data = pd.read_csv(pathOriginalData)
+    # Import the reviews data
+    ORIGINAL_DATA_PATH = os.getenv('ORIGINAL_DATA_PATH')
+    data = pd.read_csv(ORIGINAL_DATA_PATH)
 
     # Remove rows with null values
     data.dropna()
@@ -160,8 +158,8 @@ if __name__ == "__main__":
     # Show the initial data distribution after the language filtering
     showDataDistribution(data,'overall','Initial data distribution')
 
+    # Distribute data according to the corresponding categories
     data = distributeDataThree(data)
-    
     print(data)
 
     # Show the new data distribution after the distribution of data
@@ -183,5 +181,5 @@ if __name__ == "__main__":
     print(data)
 
     # Generate a csv file of new data without index numbers
-    pathFilteredData = os.getenv('FILTERED_DATA_PATH')
-    data.to_csv(pathFilteredData, index=False)
+    FILTERED_DATA_PATH = os.getenv('FILTERED_DATA_PATH')
+    data.to_csv(FILTERED_DATA_PATH, index=False)

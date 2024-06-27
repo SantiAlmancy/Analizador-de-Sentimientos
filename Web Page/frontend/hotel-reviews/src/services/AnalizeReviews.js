@@ -12,7 +12,12 @@ const analyzeReview = async (text, hotel_id) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      if (errorData.value) {
+        return errorData;
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
 
     const data = await response.json();
@@ -34,7 +39,12 @@ const analyzeReviewTransformer = async (text, hotel_id) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      if (errorData.value) {
+        return errorData;
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
 
     const data = await response.json();

@@ -5,14 +5,14 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
 # Pos Tag Finder function
-def pos_tag_finder(nltk_tag):
-    if nltk_tag.startswith('J'):
+def posTagFinder(nltkTag):
+    if nltkTag.startswith('J'):
         return wordnet.ADJ
-    elif nltk_tag.startswith('V'):
+    elif nltkTag.startswith('V'):
         return wordnet.VERB
-    elif nltk_tag.startswith('N'):
+    elif nltkTag.startswith('N'):
         return wordnet.NOUN
-    elif nltk_tag.startswith('R'):
+    elif nltkTag.startswith('R'):
         return wordnet.ADV
     else:
         return None
@@ -20,15 +20,15 @@ def pos_tag_finder(nltk_tag):
 # Lemmatization Process
 def lemmatizer(sentence):
   ## Getting pos tags
-  pos_tags = nltk.pos_tag(nltk.word_tokenize(sentence))
-  wordnet_tagged = list(map(lambda x: (x[0], pos_tag_finder(x[1])), pos_tags))
+  posTags = nltk.pos_tag(nltk.word_tokenize(sentence))
+  wordnetTagged = list(map(lambda x: (x[0], posTagFinder(x[1])), posTags))
   ## Lemmatization
   lemmatizer = WordNetLemmatizer()
-  lemmatized_sentence = []
-  for word, tag in wordnet_tagged:
+  lemmatizedSentence = []
+  for word, tag in wordnetTagged:
       if tag is None:
-          lemmatized_sentence.append(word) # Avoid tagging unnecesary words
+          lemmatizedSentence.append(word) # Avoid tagging unnecesary words
       else:
-          lemmatized_sentence.append(lemmatizer.lemmatize(word, tag)) # Adding tag to lemmatize
-  lemmatized_sentence = " ".join(lemmatized_sentence)
-  return lemmatized_sentence
+          lemmatizedSentence.append(lemmatizer.lemmatize(word, tag)) # Adding tag to lemmatize
+  lemmatizedSentence = " ".join(lemmatizedSentence)
+  return lemmatizedSentence

@@ -1,4 +1,3 @@
-# reviews/views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -78,17 +77,20 @@ class HuggingFacePredictionView(APIView):
         except Hotel.DoesNotExist:
             return Response({"error": "Hotel does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
+        # Check if text has at least 10 words
+        word_count = len(text.split())
+        if word_count < 10:
+            return Response({"value": "Review must be at least 10 words long."}, status=status.HTTP_400_BAD_REQUEST)
+
         # Preprocess text and get prediction
         processed_text = models.preprocess_text(text)
-        prediction = models.classifier(processed_text, return_all_scores=True)
-        
+        prediction = models.classifier(processed_text, top_k=None)
         # Map predicted label
-        predicted_label = models.mapLabels(prediction).lower()
-
+        predicted_label = models.map_labels(prediction).lower()
         # Create Review object
         review_data = {
             "hotel": hotel,
-            "review": text,  # Save original text
+            "review": text,
             "value": predicted_label
         }
         review_instance = Review.objects.create(**review_data)
@@ -108,9 +110,14 @@ class KerasModelPredictionView(APIView):
         except Hotel.DoesNotExist:
             return Response({"error": f"Hotel with ID {hotel_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Preprocess text and get prediction
+        # Check if text has at least 10 words
+        word_count = len(text.split())
+        if word_count < 10:
+            return Response({"value": "Review must be at least 10 words long."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Preprocess text and get prediction label
         pred = models.predict_text(text).lower()
-
+        # Create Review object
         review_data = {
             "hotel": hotel,
             "review": text,

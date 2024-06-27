@@ -1,20 +1,19 @@
 import os
 import pandas as pd
 from dotenv import load_dotenv 
-from htmlTagsRemoval import remove_html_tags
-#from maxChar import singleCharacterRemoval, removeMultipleSpaces
+from htmlTagsRemoval import removeHtmlTags
 
 from lemmatization import lemmatizer
 from stopWords import removeStopWords
-from filtering import convert_number_words, num_words
+from filtering import convertNumberWords
 from StripCharsSpaces import singleCharacterRemoval, specialCharacterRemoval, removeMultipleSpaces
 
 
 if __name__ == "__main__":
-    # Importing the data
+    # Import filtered and distributed data
     load_dotenv() 
-    filePath = os.getenv("FILTERED_DATA_PATH")
-    df = pd.read_csv(filePath)
+    FILTERED_DATA_PATH = os.getenv("FILTERED_DATA_PATH")
+    df = pd.read_csv(FILTERED_DATA_PATH)
     
     # Apply functions:
     # Stop Words Removal
@@ -30,20 +29,20 @@ if __name__ == "__main__":
     df['title'] = df['title'].apply(singleCharacterRemoval)
 
     # Remove HTML Tags
-    df['text'] = df['text'].apply(remove_html_tags)
-    df['title'] = df['title'].apply(remove_html_tags)
+    df['text'] = df['text'].apply(removeHtmlTags)
+    df['title'] = df['title'].apply(removeHtmlTags)
 
     # Convert words to numbers
-    df['text'] = df['text'].apply(convert_number_words)
-    df['title'] = df['title'].apply(convert_number_words)
+    df['text'] = df['text'].apply(convertNumberWords)
+    df['title'] = df['title'].apply(convertNumberWords)
     
     # Special Characteres Removal
-    special_characters_to_remove = [
+    specialCharactersToRemove = [
     '~', '`', '@', '#', '$', '%', '^', '&', '*', '(', ')',
     '_', '+', '=', '{', '}', '[', ']', '|', ':', ';', '"',
     "'", '<', '>', ',', '.', '/', '-', '\n', '\t', '\r', '\x0b', '\x0c']
-    df['text'] = df['text'].apply(lambda x: specialCharacterRemoval(x, special_characters_to_remove))
-    df['title'] = df['title'].apply(lambda x: specialCharacterRemoval(x, special_characters_to_remove))
+    df['text'] = df['text'].apply(lambda x: specialCharacterRemoval(x, specialCharactersToRemove))
+    df['title'] = df['title'].apply(lambda x: specialCharacterRemoval(x, specialCharactersToRemove))
 
     # Multiples Spaces Removal
     df['text'] = df['text'].apply(removeMultipleSpaces)
@@ -52,6 +51,6 @@ if __name__ == "__main__":
     # Columns selection
     df = df[['title', 'text', 'overall']]
 
-    # Preprocessed csv file generation
-    pathPreprocesseddData = os.getenv('PREPROCESSED_DATA_PATH')
-    df.to_csv(pathPreprocesseddData, index=False)  
+    # Generate preprocessed csv file
+    PREPROCESSED_DATA_PATH = os.getenv('PREPROCESSED_DATA_PATH')
+    df.to_csv(PREPROCESSED_DATA_PATH, index=False)  
