@@ -60,20 +60,53 @@ To deploy this project run
 ```http
   GET /api/hotels
 ```
+Retrieves a list of existing hotels (limited to 20 rows).
+```json
+[
+    {
+        "hotel_id": "H00001",
+        "hotel_name": "BEST WESTERN The Hotel California",
+        "hotel_class": 3
+    },
+    {
+        "hotel_id": "H00002",
+        "hotel_name": "Hotel Beresford",
+        "hotel_class": 4
+    },
+    ...
+]
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+```
 
 #### Get reviews from hotels
 
 ```http
-  GET /api/items/${id}
+  GET /api/hotels/<hotel_id>/reviews/
 ```
+Retrieves a list of reviews for a specific hotel (limited to 20 rows).
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| `hotel_id`| `string` | **Required**. Id of item to fetch |
+
+```json
+[
+    {
+        "review_id": 1,
+        "title": "Great Stay",
+        "review": "I had a wonderful experience at this hotel.",
+        "value": "positive"
+    },
+    {
+        "review_id": 2,
+        "title": "Average Experience",
+        "review": "The hotel was okay, but could be better.",
+        "value": "negative"
+    },
+    ...
+]
+
+```
 
 #### Post reviews
 
@@ -81,19 +114,56 @@ To deploy this project run
   POST /api/reviews
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+Creates a new review for a hotel.
+
+- Request: 
+   ```json
+   {
+       "hotel_id": "H00001",
+       "title": "Amazing Service",
+       "review": "The service at this hotel was exceptional!",
+       "value": "positive"
+   }
+   ```
+- Response:
+  ```json
+  {
+       "review_id": 101,
+       "hotel_id": "H00001",
+       "title": "Amazing Service",
+       "review": "The service at this hotel was exceptional!",
+       "value": "positive"
+   }
+  ```
 
 #### Post new hotels
 
 ```http
   POST /api/hotels/add
 ```
+Adds new hotels to the database.
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+- Request: 
+   ```json
+   [
+       {
+           "hotel_id": "H00001",
+           "hotel_name": "BEST WESTERN The Hotel California",
+           "hotel_class": 3
+       },
+       {
+           "hotel_id": "H00002",
+           "hotel_name": "Hotel Beresford",
+           "hotel_class": 4
+       }
+   ]
+   ```
+- Response:
+  ```json
+  {
+       "message": "Hotels created successfully"
+  }
+  ```
 
 
 
@@ -124,6 +194,11 @@ You need to follow these commands:
 
 #### How to run the frontend?
 
+- **Install npm**: Install npm dependency.
+    ```bash
+    npm install
+    ```
+
 - **Build the Project**: Build the project for production.
     ```bash
     npm run build
@@ -134,9 +209,9 @@ You need to follow these commands:
     npm start
     ```
 
-#### How many languages does the model detect?
+#### Does it only detect English reviews?
 
-At the moment just English. Spanish comming soon!
+No! It can detect many languages such as Spanish, German, French, etc. Thanks to the auto-translation if it detects that the comment is not English.
 
 #### What is Hugging Face?
 
