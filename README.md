@@ -227,8 +227,8 @@ Hugging Face is a company specializing in natural language processing technologi
 
 #### How many states has the sentiment analyzer?
 
-- If you chose Keras, it will have **Positive** and **Negative**. 
-- But if you chose Transformers it has the following states: **very_negative**, **negative**, **neutral**, **positive** and **very positive**.
+- If you chose *Keras*, it will have **Positive** and **Negative**. 
+- But if you chose *Transformers* it has the following states: **very_negative**, **negative**, **neutral**, **positive** and **very positive**.
 
 ## Authors 4️⃣
 
