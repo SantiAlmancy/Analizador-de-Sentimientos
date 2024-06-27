@@ -3,7 +3,6 @@ import pandas as pd
 import ast
 import py3langid as langid
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm 
 
 def countWords(text):
     # Returns the number of words in the text

@@ -2,7 +2,6 @@ from lemmatization import lemmatizer
 from stopWords import removeStopWords
 from filtering import convertNumberWords
 from StripCharsSpaces import singleCharacterRemoval, specialCharacterRemoval, removeMultipleSpaces
-import pandas as np
 
 def preprocessTextInput(text):
     text = removeStopWords(text)
