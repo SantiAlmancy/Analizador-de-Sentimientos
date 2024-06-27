@@ -3,7 +3,8 @@
 
 
 
-https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/9f8dab57-fbba-4786-be9e-2e9fa84a5caa
+![performing-twitter-sentiment-analysis1 Background Removed](https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/8da463ce-0e0f-4b39-9f39-b107e272615d)
+
 
 
 
@@ -37,6 +38,9 @@ To set up the environment using `requirements.txt`, follow these steps:
 - **Install the dependencies**:
     ```sh
     pip install -r requirements.txt
+
+## Demo ▶️
+https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/9f8dab57-fbba-4786-be9e-2e9fa84a5caa
 
 ## Technologies used for the web app ⚒️
 1. **BackEnd**
