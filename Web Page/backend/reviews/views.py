@@ -77,6 +77,11 @@ class HuggingFacePredictionView(APIView):
         except Hotel.DoesNotExist:
             return Response({"error": "Hotel does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
+        # Check if text has at least 10 words
+        word_count = len(text.split())
+        if word_count < 10:
+            return Response({"value": "Review must be at least 10 words long."}, status=status.HTTP_400_BAD_REQUEST)
+
         # Preprocess text and get prediction
         processed_text = models.preprocess_text(text)
         prediction = models.classifier(processed_text, top_k=None)
@@ -104,6 +109,11 @@ class KerasModelPredictionView(APIView):
             hotel = Hotel.objects.get(hotel_id=hotel_id)
         except Hotel.DoesNotExist:
             return Response({"error": f"Hotel with ID {hotel_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if text has at least 10 words
+        word_count = len(text.split())
+        if word_count < 10:
+            return Response({"value": "Review must be at least 10 words long."}, status=status.HTTP_400_BAD_REQUEST)
         
         # Preprocess text and get prediction label
         pred = models.predict_text(text).lower()

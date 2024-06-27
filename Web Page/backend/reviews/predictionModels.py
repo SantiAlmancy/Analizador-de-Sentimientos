@@ -64,14 +64,27 @@ class Model:
 
     def predict_text(self, text):
         # Preprocess the text
-        processed_text = self.preprocess_text(text, True)
-        # Make prediction
-        prediction = self.model.predict(processed_text)
-        # Convert prediction to a category or class label
-        predicted_category = prediction.argmax(axis=-1)
-        category_map = {0: 'negative', 1: 'positive'}
-        predicted_label = category_map[predicted_category[0]]
-        return predicted_label
+        processed_text = self.preprocess_text(text, is_tensor=False)
+        # Determine which model to use based on text length
+        word_count = len(processed_text.split())
+        if word_count < 20:
+            # Use transformer model
+            prediction = self.classifier(processed_text)
+            mapped_label = self.map_labels(prediction)
+            # Combining "very positive", "positive", and "neutral" as "positive"
+            if mapped_label in ["very_positive", "positive", "neutral"]:
+                return "positive"
+            else:
+                return "negative"
+        else:
+            # Use Keras model
+            processed_text = self.preprocess_text(text, is_tensor=True)
+            prediction = self.model.predict(processed_text)
+            # Convert prediction to a category or class label
+            predicted_category = prediction.argmax(axis=-1)
+            category_map = {0: 'negative', 1: 'positive'}
+            predicted_label = category_map[predicted_category[0]]
+            return predicted_label
 
     
     def translate_to_english(self, text):
