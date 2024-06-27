@@ -1,6 +1,10 @@
 
 # Sentiment Analyzer from Hotel Reviews
-![_365fea16-fd90-483b-8c4c-df3613e2f5cb Background Removed Small Background Removed](https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/5d321be2-ea9f-44ef-9d2b-8b8e177ce136)
+
+
+https://github.com/SantiAlmancy/Analizador-de-Sentimientos/assets/107863034/3da011a9-1ca9-4083-85ac-88ad0334bc7e
+
+
 
 This proyect will predict if the comment introduced is either positive or negative based on a trainning with hundred of thounsands of comments from many websites and hotels.
 
@@ -72,8 +76,7 @@ Retrieves a list of existing hotels (limited to 20 rows).
         "hotel_id": "H00002",
         "hotel_name": "Hotel Beresford",
         "hotel_class": 4
-    },
-    ...
+    }
 ]
 
 ```
@@ -102,8 +105,7 @@ Retrieves a list of reviews for a specific hotel (limited to 20 rows).
         "title": "Average Experience",
         "review": "The hotel was okay, but could be better.",
         "value": "negative"
-    },
-    ...
+    }
 ]
 
 ```
