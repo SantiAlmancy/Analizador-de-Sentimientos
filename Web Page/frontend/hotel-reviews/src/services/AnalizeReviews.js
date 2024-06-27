@@ -39,9 +39,9 @@ const analyzeReviewTransformer = async (text, hotel_id) => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json(); // Intenta parsear el JSON del error
+      const errorData = await response.json();
       if (errorData.value) {
-        return errorData; // Si el error tiene un campo 'value', lo retornamos
+        return errorData;
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
